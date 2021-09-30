@@ -79,15 +79,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import '../../../assets/index.scss';
+@import "~@/common/style/index.scss";
+
 .nav-box {
   position: fixed;
   top: 0;
-  background: $primary-color;
   width: 100%;
   height: 60px;
   line-height: 60px;
   z-index: 999;
+  background: $primary-color;
   .home-logo {
     position: absolute;
     top: 3px;

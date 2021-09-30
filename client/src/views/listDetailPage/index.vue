@@ -75,7 +75,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/index.scss';
+@import "~@/common/style/index.scss";
+
 .bill-box {
   .detail-box {
     padding: 0 20px;
