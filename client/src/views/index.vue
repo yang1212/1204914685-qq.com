@@ -1,43 +1,34 @@
-<template>
-  <div class="container-box">
-    <router-view></router-view>
-  </div>
-</template>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import navHeader from './component/navHeader/index.vue'
 
-<script>
-
-export default {
+export default defineComponent({
   name: 'index',
-  data () {
+  components: {
+    navHeader
+  },
+  data() {
     return {
     }
   },
-  created () {
-    const userId = JSON.parse(localStorage.getItem('userId'))
-    if (userId) {
-      this.$router.push({
-        path: '/billManager'
-      })
-    }
+  setup() {
   },
   methods: {
   }
-}
+})
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.container-box {
-  width: 100%;
+<template>
+  <div class="index-page">
+    <navHeader/>
+    <router-view/>
+  </div>
+</template>
+
+<style scoped>
+.index-page {
+  position: relative;
   height: 100%;
-  // background: url("../assets/images/loginBg.png");
-}
-.masklayer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, .7);
+  background: #2a2a2a;
 }
 </style>
