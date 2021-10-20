@@ -1,8 +1,5 @@
 <template>
   <div class="login-box">
-    <div class="login-img-info">
-      <!-- <img src="../../../assets/images/loginTag.png" class="login-img"/> -->
-    </div>
     <el-card class="box-card">
       <el-form :model="formData" class="form-box">
         <el-form-item>

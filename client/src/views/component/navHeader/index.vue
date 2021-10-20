@@ -1,18 +1,41 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import addPanel from '../addPanel/index.vue'
+import loginPanel from '../loginPanel/index.vue'
 
 export default defineComponent({
   name: 'navHeader',
+  components: {
+    addPanel,
+    loginPanel
+  },
   data() {
     return {
-      hasLogin: true
+      hasLogin: false,
+      showAddPanel: false,
+      showLoginPanel: false
+    }
+  },
+  created() {
+    const userId = JSON.parse(localStorage.getItem('userId'))
+    if (userId) {
+      this.hasLogin = true
     }
   },
   setup() {
   },
   methods: {
-    openModal() {
-      console.log(1)
+    addData() {
+      this.showAddPanel = true
+    },
+    closeModal() {
+      this.showAddPanel = false
+    },
+    goLogin() {
+      this.showLoginPanel = true
+    },
+    closeLoginModal() {
+      this.showLoginPanel = false
     }
   }
 })
@@ -28,7 +51,9 @@ export default defineComponent({
       </div>
       <span class="more-icon response-icon" @click="openMore">=</span>
     </div>
-    <p class="default-btn btn-position" @click="openModal" v-else>start</p>
+    <p class="default-btn btn-position" @click="goLogin" v-else>start</p>
+    <addPanel v-if="showAddPanel" @close="closeModal"/>
+    <loginPanel v-if="showLoginPanel" @close="closeLoginModal"/>
   </div>
 </template>
 
