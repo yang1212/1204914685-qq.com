@@ -2,3 +2,8 @@
 
 
 [script setup](https://chengpeiquan.com/article/vue3-script-setup.html)
+
+
+别名路径引用编辑器报错，页面正常/vetur
+
+[vue3中提示找不到模块“path“](https://python.iitter.com/other/107033.html)
