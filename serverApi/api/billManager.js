@@ -31,6 +31,7 @@ router.post('/register', function(req, res) {
         responseClient(res)
       })
     } else {
+      console.log(1, objName, data)
       responseClient(res, 200, 403, '该账号已注册', data)
     }
   }).catch(err => {

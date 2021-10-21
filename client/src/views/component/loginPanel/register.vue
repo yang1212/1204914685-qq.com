@@ -1,48 +1,33 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref, reactive } from "vue"
+import { register } from 'api/index'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: "register",
-  data() {
-    return {
-      formData: {
-        objName: "",
-        password: "",
-        confirmPassword: "",
-      },
-      loading: false,
-    };
-  },
-  setup() {},
-  methods: {
-    confirmBtn() {
-      if (!this.formData.objName) {
-        this.$message.error("用户名不能为空");
-        return;
-      }
-      if (!this.formData.password) {
-        this.$message.error("请设置密码");
-        return;
-      }
-      if (this.formData.password !== this.formData.confirmPassword) {
-        this.$message.error("密码确认不一致");
-        return;
-      }
-      this.loading = true;
-      // register({ objName: this.formData.objName, password: this.formData.password }).then(res => {
-      //   this.loading = false
-      //   if (res.resultCode === 403) {
-      //     this.$message.error(res.message)
-      //   } else {
-      //     localStorage.setItem('userId', JSON.stringify(res.data._id))
-      //     this.$router.push({
-      //       path: 'billManager'
-      //     })
-      //   }
-      // })
-    },
-  },
-});
+const loading = ref(false)
+const formData = reactive({
+  objName: "",
+  password: "",
+  confirmPassword: "",
+})
+const router = useRouter()
+const confirmBtn = async () => {
+  // if (formData.password !== formData.confirmPassword) {
+  //   return ElMessage.error('密码确认不一致')
+  // }
+  loading.value = true
+  const res: any = await register({ objName: formData.objName, password: formData.password })
+  const result = res.data
+  loading.value = false
+  if (result.resultCode === 403) {
+    ElMessage.error(result.message)
+  } else {
+    localStorage.setItem('userId', JSON.stringify(result.data._id))
+    router.push({
+      path: 'contact'
+    })
+  }
+}
 </script>
 
 <template>

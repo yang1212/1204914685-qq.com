@@ -29,39 +29,39 @@ export default defineComponent({
   },
   setup() {},
   methods: {
-    onSubmit () {
-      this.$refs['formDataRef'].validate((valid) => {
-        // if (valid) {
-        //   const userId = JSON.parse(localStorage.getItem('userId'))
-        //   this.formData.userId = userId
-        //   this.loading = true
-        //   createBill(this.formData).then(res => {
-        //     billDetailList({userId: userId}).then(res => {
-        //       this.loading = false
-        //       this.$emit('close')
-        //       this.$router.push({
-        //         path: '/billManager'
-        //       })
-        //       // 解决跳转首页时, 由于页面缓存，没用调用最新数据
-        //       this.updateDetailList(res.data)
-        //     })
-        //   })
-        // }
-      })
-    },
-    onCancel () {
-      this.$emit('close')
-    },
-    format (value) {
-      if (!value) { return }
-      const year = value.getFullYear()
-      const day = (value.getDate() > 9) ? value.getDate() : ('0' + value.getDate())
-      let month = value.getMonth() + 1
-      if (month < 10) {
-        month = '0' + month
-      }
-      return `${year}-${month}-${day}`
-    }
+    // onSubmit () {
+    //   // this.$refs['formDataRef'].validate((valid) => {
+    //     // if (valid) {
+    //     //   const userId = JSON.parse(localStorage.getItem('userId'))
+    //     //   this.formData.userId = userId
+    //     //   this.loading = true
+    //     //   createBill(this.formData).then(res => {
+    //     //     billDetailList({userId: userId}).then(res => {
+    //     //       this.loading = false
+    //     //       this.$emit('close')
+    //     //       this.$router.push({
+    //     //         path: '/billManager'
+    //     //       })
+    //     //       // 解决跳转首页时, 由于页面缓存，没用调用最新数据
+    //     //       this.updateDetailList(res.data)
+    //     //     })
+    //     //   })
+    //     // }
+    //   // })
+    // },
+    // onCancel () {
+    //   this.$emit('close')
+    // },
+    // format (value) {
+    //   if (!value) { return }
+    //   const year = value.getFullYear()
+    //   const day = (value.getDate() > 9) ? value.getDate() : ('0' + value.getDate())
+    //   let month = value.getMonth() + 1
+    //   if (month < 10) {
+    //     month = '0' + month
+    //   }
+    //   return `${year}-${month}-${day}`
+    // }
   },
 });
 </script>
