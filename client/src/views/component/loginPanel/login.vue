@@ -1,45 +1,27 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref, reactive } from "vue"
+import { ElMessage } from 'element-plus'
+import { login } from 'api/index'
 
-export default defineComponent({
-  name: "login",
-  data() {
-    return {
-      loading: false,
-      formData: {
-        objName: "",
-        password: "",
-      },
-    };
-  },
-  setup() {},
-  methods: {
-    onLogin() {
-      if (!this.formData.objName || !this.formData.password) {
-        this.$message.error("请输入用户名和密码进行登录");
-        return false;
-      }
-      this.loading = true;
-      // login(this.formData).then(res => {
-      //   this.loading = false
-      //   if (res.data.length === 0) {
-      //     this.$message.error('请输入正确的用户名和密码进行登录')
-      //     return false
-      //   } else {
-      //     localStorage.setItem('userId', JSON.stringify(res.data[0]._id))
-      //     this.$router.push({
-      //       path: 'billManager'
-      //     })
-      //   }
-      // })
-    },
-    onRegister() {
-      this.$router.push({
-        path: "register",
-      });
-    },
-  },
-});
+const loading = ref(false)
+const formData = reactive({
+  objName: "",
+  password: ""
+})
+
+const onLogin = async () => {
+  if (!formData.objName || !formData.password) {
+    return ElMessage.error('请输入用户名和密码进行登录')
+  }
+  loading.value = true
+  const res: any = await login(formData)
+  if (res.data.length === 0) {
+    return ElMessage.error('请输入正确的用户名和密码进行登录')
+  } else {
+    localStorage.setItem('userId', JSON.stringify(res.data[0]._id))
+  }
+}
+
 </script>
 
 <template>

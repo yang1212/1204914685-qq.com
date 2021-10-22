@@ -17,10 +17,10 @@ export default defineComponent({
     }
   },
   created() {
-    const userId = JSON.parse(localStorage.getItem('userId'))
-    if (userId) {
-      this.hasLogin = true
-    }
+    // const userId = JSON.parse(localStorage.getItem('userId'))
+    // if (userId) {
+    //   this.hasLogin = true
+    // }
   },
   setup() {
   },
@@ -45,9 +45,9 @@ export default defineComponent({
   <div class="header">
     <div v-if="hasLogin">
       <div class="nav-list response-list">
-        <span @click.native="addData">&nbsp;1</span>
-        <span @click.native="goChartPage">&nbsp;2</span>
-        <span @click.native="goMemberPage">&nbsp;3</span>
+        <span @click="addData">&nbsp;1</span>
+        <span @click="goChartPage">&nbsp;2</span>
+        <span @click="goMemberPage">&nbsp;3</span>
       </div>
       <span class="more-icon response-icon" @click="openMore">=</span>
     </div>

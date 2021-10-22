@@ -1,11 +1,11 @@
-import Request from './require'
+import request from './require'
 
-const request = Request()
+// const request = Request()
 
 export function login(params:any) {
   return request({
     url: 'bill/login',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -13,7 +13,7 @@ export function login(params:any) {
 export function register(params:any) {
   return request({
     url: 'bill/register',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -21,7 +21,7 @@ export function register(params:any) {
 export function getTypeData(params:any) {
   return request({
     url: 'bill/typeData',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -29,7 +29,7 @@ export function getTypeData(params:any) {
 export function createBill(params:any) {
   return request({
     url: 'bill/createBill',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -37,7 +37,7 @@ export function createBill(params:any) {
 export function getMemberInfo(params:any) {
   return request({
     url: 'bill/getMemberInfo',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -45,7 +45,7 @@ export function getMemberInfo(params:any) {
 export function billTypeData(params:any) {
   return request({
     url: 'bill/initTypeList',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -53,7 +53,7 @@ export function billTypeData(params:any) {
 export function billDetailList(params:any) {
   return request({
     url: 'bill/billDetailList',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -61,7 +61,7 @@ export function billDetailList(params:any) {
 export function delListData(params:any) {
   return request({
     url: 'bill/delListData',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -69,7 +69,7 @@ export function delListData(params:any) {
 export function forTimeCount(params:any) {
   return request({
     url: 'bill/forTimeCount',
-    params,
+    data: params,
     method: 'post'
   })
 }
@@ -77,7 +77,7 @@ export function forTimeCount(params:any) {
 export function forYearCount(params:any) {
   return request({
     url: 'bill/forYearCount',
-    params,
+    data: params,
     method: 'post'
   })
 }

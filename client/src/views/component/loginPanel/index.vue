@@ -1,24 +1,11 @@
-<script lang="ts">
-import { defineComponent } from "vue"
-import login from './login.vue'
-import register from './register.vue'
+<script lang="ts" setup>
+import { ref, reactive } from "vue"
+import Login from './login.vue'
+import Register from './register.vue'
 
-export default defineComponent({
-  name: "loginPanel",
-  components: {
-    login,
-    register
-  },
-  data() {
-    return {
-      showDrawer: true,
-      loading: false
-    };
-  },
-  setup() {},
-  methods: {
-  },
-});
+const showDrawer = ref(true)
+const loading = ref(false)
+
 </script>
 
 <template>
@@ -33,10 +20,10 @@ export default defineComponent({
   >
     <el-tabs type="border-card">
       <el-tab-pane label="login">
-        <login/>
+        <Login/>
       </el-tab-pane>
       <el-tab-pane label="register">
-        <register/>
+        <Register/>
       </el-tab-pane>
     </el-tabs>
   </el-drawer>
