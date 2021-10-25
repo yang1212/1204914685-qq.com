@@ -1,28 +1,31 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue"
+import { useStore } from 'vuex'
 import { register } from 'api/index'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
+const store = useStore()
+const router = useRouter()
 const loading = ref(false)
 const formData = reactive({
   objName: "",
   password: "",
   confirmPassword: "",
 })
-const router = useRouter()
 const confirmBtn = async () => {
   // if (formData.password !== formData.confirmPassword) {
   //   return ElMessage.error('密码确认不一致')
   // }
   loading.value = true
   const res: any = await register({ objName: formData.objName, password: formData.password })
-  const result = res.data
   loading.value = false
-  if (result.resultCode === 403) {
-    ElMessage.error(result.message)
+  if (res.resultCode === 403) {
+    ElMessage.error(res.message)
   } else {
-    localStorage.setItem('userId', JSON.stringify(result.data._id))
+    store.commit("setLoginMadalMutation", false)
+    store.commit("setIsLogin", true)
+    localStorage.setItem('userId', res.data._id)
     router.push({
       path: 'contact'
     })

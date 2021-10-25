@@ -17,5 +17,15 @@ const instance = axios.create({
 instance.defaults.timeout = 30 * 1000
 instance.defaults.baseURL = '/api'
 
+instance.interceptors.response.use(
+  response => {
+    if (response.status === 200) {
+      return response.data
+    } else {
+      return Promise.reject(response.data)
+    }
+  }
+)
+
 export default instance
 

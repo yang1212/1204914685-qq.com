@@ -1,59 +1,47 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import addPanel from '../addPanel/index.vue'
 import loginPanel from '../loginPanel/index.vue'
 
-export default defineComponent({
-  name: 'navHeader',
-  components: {
-    addPanel,
-    loginPanel
-  },
-  data() {
-    return {
-      hasLogin: false,
-      showAddPanel: false,
-      showLoginPanel: false
-    }
-  },
-  created() {
-    // const userId = JSON.parse(localStorage.getItem('userId'))
-    // if (userId) {
-    //   this.hasLogin = true
-    // }
-  },
-  setup() {
-  },
-  methods: {
-    addData() {
-      this.showAddPanel = true
-    },
-    closeModal() {
-      this.showAddPanel = false
-    },
-    goLogin() {
-      this.showLoginPanel = true
-    },
-    closeLoginModal() {
-      this.showLoginPanel = false
-    }
+const showAddPanelRef = ref(false)
+const store = useStore();
+
+onMounted(() => {
+  if (localStorage.getItem('userId')) {
+    store.commit("setIsLogin", true)
+  } else {
+    store.commit("setIsLogin", false)
   }
 })
+
+const openAddModal = () => {
+  showAddPanelRef.value = true
+}
+const closeAddModal = () => {
+  showAddPanelRef.value = false
+}
+const openLoginModal = () => {
+  store.commit("setLoginMadalMutation", true)
+}
+const closeLoginModal = () => {
+  store.commit("setLoginMadalMutation", false)
+}
 </script>
 
 <template>
   <div class="header">
-    <div v-if="hasLogin">
+    <div v-if="$store.state.isLogin">
       <div class="nav-list response-list">
-        <span @click="addData">&nbsp;1</span>
+        <span @click="openAddModal">&nbsp;1</span>
         <span @click="goChartPage">&nbsp;2</span>
         <span @click="goMemberPage">&nbsp;3</span>
       </div>
-      <span class="more-icon response-icon" @click="openMore">=</span>
+      <span class="more-icon response-icon">=</span>
     </div>
-    <p class="default-btn btn-position" @click="goLogin" v-else>start</p>
-    <addPanel v-if="showAddPanel" @close="closeModal"/>
-    <loginPanel v-if="showLoginPanel" @close="closeLoginModal"/>
+    <p class="default-btn btn-position" @click="openLoginModal" v-else>start</p>
+    <addPanel v-if="showAddPanelRef" @close="closeAddModal"/>
+    <loginPanel v-if="$store.state.showLoginModal"/>
   </div>
 </template>
 

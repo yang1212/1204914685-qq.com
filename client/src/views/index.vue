@@ -1,27 +1,6 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import navHeader from './component/navHeader/index.vue'
-import { getTypeData } from 'api/index'
 
-export default defineComponent({
-  name: 'index',
-  components: {
-    navHeader
-  },
-  data() {
-    return {
-    }
-  },
-  setup() {
-  },
-  created(){
-    getTypeData({}).then(res => {
-      console.log(1, res)
-    })
-  },
-  methods: {
-  }
-})
 </script>
 
 <template>

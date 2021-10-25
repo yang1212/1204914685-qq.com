@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
+import { ref } from "vue"
 import Login from './login.vue'
 import Register from './register.vue'
 

@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue"
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 import { login } from 'api/index'
 
+const store = useStore()
+const router = useRouter()
 const loading = ref(false)
 const formData = reactive({
   objName: "",
@@ -15,10 +19,16 @@ const onLogin = async () => {
   }
   loading.value = true
   const res: any = await login(formData)
+  loading.value = false
   if (res.data.length === 0) {
     return ElMessage.error('请输入正确的用户名和密码进行登录')
   } else {
-    localStorage.setItem('userId', JSON.stringify(res.data[0]._id))
+    store.commit("setLoginMadalMutation", false)
+    store.commit("setIsLogin", true)
+    localStorage.setItem('userId', res.data[0]._id)
+    router.push({
+      path: 'contact'
+    })
   }
 }
 
