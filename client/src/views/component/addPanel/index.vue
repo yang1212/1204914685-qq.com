@@ -1,69 +1,54 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { reactive, ref, onMounted, defineEmits } from "vue"
+import { createBill, getTypeData } from "api/index"
 
-export default defineComponent({
-  name: "addPanel",
-  data() {
-    return {
-      formData: {
-        objName: '',
-        objType: '',
-        objPrice: '',
-        objDate: ''
-      },
-      formDataRules: {
-        objName: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
-        ],
-        objPrice: [
-          { required: true, message: '请输入价格', trigger: 'blur' }
-        ],
-        objDate: [
-          { required: true, message: '请选择日期', trigger: 'blur' }
-        ]
-      },
-      obyTypeEnum: [],
-      loading: false,
-      showDrawer: true
-    }
-  },
-  setup() {},
-  methods: {
-    // onSubmit () {
-    //   // this.$refs['formDataRef'].validate((valid) => {
-    //     // if (valid) {
-    //     //   const userId = JSON.parse(localStorage.getItem('userId'))
-    //     //   this.formData.userId = userId
-    //     //   this.loading = true
-    //     //   createBill(this.formData).then(res => {
-    //     //     billDetailList({userId: userId}).then(res => {
-    //     //       this.loading = false
-    //     //       this.$emit('close')
-    //     //       this.$router.push({
-    //     //         path: '/billManager'
-    //     //       })
-    //     //       // 解决跳转首页时, 由于页面缓存，没用调用最新数据
-    //     //       this.updateDetailList(res.data)
-    //     //     })
-    //     //   })
-    //     // }
-    //   // })
-    // },
-    // onCancel () {
-    //   this.$emit('close')
-    // },
-    // format (value) {
-    //   if (!value) { return }
-    //   const year = value.getFullYear()
-    //   const day = (value.getDate() > 9) ? value.getDate() : ('0' + value.getDate())
-    //   let month = value.getMonth() + 1
-    //   if (month < 10) {
-    //     month = '0' + month
-    //   }
-    //   return `${year}-${month}-${day}`
-    // }
-  },
+const loading = ref(false)
+const showDrawer = ref(true)
+const formDataRef = ref(null)
+const objTypeEnum: Array<any> = reactive([])
+const formData = reactive({
+  objName: "",
+  objType: "",
+  objPrice: "",
+  objDate: "",
+  userId: "",
 });
+const formDataRules = reactive({
+  objName: [{ required: true, message: "请输入名称", trigger: "blur" }],
+  objPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
+  objDate: [{ required: true, message: "请选择日期", trigger: "blur" }],
+})
+const emit = defineEmits(['close'])
+
+onMounted(async() => {
+  formData.objDate = format(new Date())
+  const res: any = await getTypeData(null)
+  // 不可直接赋值，不然答不到响应式，原理暂时不是很理解
+  objTypeEnum.length = 0
+  objTypeEnum.push(...res.data)
+})
+
+const onSubmit = async () => {
+  const userId = localStorage.getItem("userId")
+  if (userId) {
+    formData.userId = userId;
+  }
+  loading.value = true;
+  const res: any = await createBill(formData);
+  loading.value = false;
+}
+const onCancel = () => {
+  emit('close')
+}
+const format = (value:Date) => {
+  const year = value.getFullYear()
+  const day = (value.getDate() > 9) ? value.getDate() : ('0' + value.getDate())
+  let month:string|number = value.getMonth() + 1
+  if (month < 10) {
+    month = '0' + month
+  }
+  return `${year}-${month}-${day}`
+}
 </script>
 
 <template>
@@ -90,7 +75,7 @@ export default defineComponent({
         <el-form-item class="select-form-item">
           <el-select v-model="formData.objType" placeholder="类型">
             <el-option
-              v-for="(item, index) in obyTypeEnum"
+              v-for="(item, index) in objTypeEnum"
               :key="index"
               :label="item.label"
               :value="item.code"

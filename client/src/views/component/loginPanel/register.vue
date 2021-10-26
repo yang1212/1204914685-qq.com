@@ -14,9 +14,9 @@ const formData = reactive({
   confirmPassword: "",
 })
 const confirmBtn = async () => {
-  // if (formData.password !== formData.confirmPassword) {
-  //   return ElMessage.error('密码确认不一致')
-  // }
+  if (formData.password !== formData.confirmPassword) {
+    return ElMessage.error('密码确认不一致')
+  }
   loading.value = true
   const res: any = await register({ objName: formData.objName, password: formData.password })
   loading.value = false
