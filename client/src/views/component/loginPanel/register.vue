@@ -27,7 +27,7 @@ const confirmBtn = async () => {
     store.commit("setIsLogin", true)
     localStorage.setItem('userId', res.data._id)
     router.push({
-      path: 'contact'
+      path: 'chart'
     })
   }
 }

@@ -27,7 +27,7 @@ const onLogin = async () => {
     store.commit("setIsLogin", true)
     localStorage.setItem('userId', res.data[0]._id)
     router.push({
-      path: 'contact'
+      path: 'chart'
     })
   }
 }
