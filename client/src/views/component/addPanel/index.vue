@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { reactive, ref, onMounted, defineEmits } from "vue"
-import { createBill, getTypeData } from "api/index"
+import { reactive, ref, onMounted, defineEmits } from "vue";
+import { createBill, getTypeData } from "api/index";
 
-const loading = ref(false)
-const showDrawer = ref(true)
-const formDataRef = ref(null)
-const objTypeEnum: Array<any> = reactive([])
+const loading = ref(false);
+const showDrawer = ref(true);
+const formDataRef: any = ref(null);
+const objTypeEnum: Array<any> = reactive([]);
 const formData = reactive({
   objName: "",
   objType: "",
@@ -15,40 +15,45 @@ const formData = reactive({
 });
 const formDataRules = reactive({
   objName: [{ required: true, message: "请输入名称", trigger: "blur" }],
+  objType: [{ required: true, message: "请选择类型", trigger: "change" }],
   objPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
   objDate: [{ required: true, message: "请选择日期", trigger: "blur" }],
-})
-const emit = defineEmits(['close'])
+});
+const emit = defineEmits(["close"]);
 
-onMounted(async() => {
-  formData.objDate = format(new Date())
-  const res: any = await getTypeData(null)
+onMounted(async () => {
+  formData.objDate = format(new Date());
+  const res: any = await getTypeData(null);
   // 不可直接赋值，不然答不到响应式，原理暂时不是很理解
-  objTypeEnum.length = 0
-  objTypeEnum.push(...res.data)
-})
-
-const onSubmit = async () => {
-  const userId = localStorage.getItem("userId")
-  if (userId) {
-    formData.userId = userId;
-  }
-  loading.value = true;
-  const res: any = await createBill(formData);
-  loading.value = false;
-}
+  objTypeEnum.length = 0;
+  objTypeEnum.push(...res.data);
+});
+const onSubmit = () => {
+  formDataRef.value.validate().then(async () => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      formData.userId = userId;
+    }
+    loading.value = true;
+    const res: any = await createBill(formData)
+    loading.value = false;
+    emit("close")
+  }).catch(() => {
+    loading.value = false;
+  })
+};
 const onCancel = () => {
-  emit('close')
-}
-const format = (value:Date) => {
-  const year = value.getFullYear()
-  const day = (value.getDate() > 9) ? value.getDate() : ('0' + value.getDate())
-  let month:string|number = value.getMonth() + 1
+  emit("close");
+};
+const format = (value: Date) => {
+  const year = value.getFullYear();
+  const day = value.getDate() > 9 ? value.getDate() : "0" + value.getDate();
+  let month: string | number = value.getMonth() + 1;
   if (month < 10) {
-    month = '0' + month
+    month = "0" + month;
   }
-  return `${year}-${month}-${day}`
-}
+  return `${year}-${month}-${day}`;
+};
 </script>
 
 <template>
@@ -66,14 +71,14 @@ const format = (value:Date) => {
       <el-form
         class="form-data"
         :model="formData"
-        :ref="formDataRef"
+        ref="formDataRef"
         :rules="formDataRules"
       >
         <el-form-item prop="objName">
           <el-input v-model="formData.objName" placeholder="名称"></el-input>
         </el-form-item>
-        <el-form-item class="select-form-item">
-          <el-select v-model="formData.objType" placeholder="类型">
+        <el-form-item class="select-form-item" prop="objType">
+          <el-select v-model="formData.objType" placeholder="类型" clearable>
             <el-option
               v-for="(item, index) in objTypeEnum"
               :key="index"

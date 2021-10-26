@@ -10,13 +10,13 @@
 
 TO DO:
 
-1、icon失效
+1、icon失效 -x
 
 换成此版本就又正常了： "element-plus": "1.0.2-beta.53"
 
-2、[emit事件怎么向上分发](https://chengpeiquan.com/article/vue3-script-setup.html#%E4%BB%80%E4%B9%88%E6%98%AF-defineprops-%E5%92%8C-defineemit)
+2、[emit事件怎么向上分发](https://chengpeiquan.com/article/vue3-script-setup.html#%E4%BB%80%E4%B9%88%E6%98%AF-defineprops-%E5%92%8C-defineemit) -x
 
-3、校验的绑定
+3、校验的绑定 -x
 
 4、图表引入
 
