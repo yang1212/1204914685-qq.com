@@ -40,13 +40,13 @@ const onLogin = async () => {
       <el-form-item>
         <el-input
           v-model="formData.objName"
-          placeholder="用户名: test"
+          placeholder="用户名/test"
         ></el-input>
       </el-form-item>
       <el-form-item>
         <el-input
           v-model="formData.password"
-          placeholder="密码: 123"
+          placeholder="密码/123"
           type="password"
         ></el-input>
       </el-form-item>
@@ -66,7 +66,6 @@ const onLogin = async () => {
       border-bottom: 1px solid #dcdfe6;
       background: transparent;
       border-radius: 0;
-      color: #fff;
     }
     .text-btn {
       font-size: 14px;
@@ -80,7 +79,6 @@ const onLogin = async () => {
         padding: 20px 0;
         margin-top: 20px;
         background: #eee;
-        color: #fff;
         border: none;
         border-radius: 25px;
       }

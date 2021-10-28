@@ -4,6 +4,7 @@
     "paths":{
       "@": ["src"],
       "api*": ["src/api/*"],
+      "component*": ["src/component/*"]
     },
     "target": "esnext",
     "useDefineForClassFields": true,

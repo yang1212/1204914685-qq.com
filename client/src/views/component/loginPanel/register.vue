@@ -1,36 +1,39 @@
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { useStore } from 'vuex'
-import { register } from 'api/index'
-import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { ref, reactive } from "vue";
+import { useStore } from "vuex";
+import { register } from "api/index";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
-const store = useStore()
-const router = useRouter()
-const loading = ref(false)
+const store = useStore();
+const router = useRouter();
+const loading = ref(false);
 const formData = reactive({
   objName: "",
   password: "",
   confirmPassword: "",
-})
+});
 const confirmBtn = async () => {
   if (formData.password !== formData.confirmPassword) {
-    return ElMessage.error('密码确认不一致')
+    return ElMessage.error("密码确认不一致");
   }
-  loading.value = true
-  const res: any = await register({ objName: formData.objName, password: formData.password })
-  loading.value = false
+  loading.value = true;
+  const res: any = await register({
+    objName: formData.objName,
+    password: formData.password,
+  });
+  loading.value = false;
   if (res.resultCode === 403) {
-    ElMessage.error(res.message)
+    ElMessage.error(res.message);
   } else {
-    store.commit("setLoginMadalMutation", false)
-    store.commit("setIsLogin", true)
-    localStorage.setItem('userId', res.data._id)
+    store.commit("setLoginMadalMutation", false);
+    store.commit("setIsLogin", true);
+    localStorage.setItem("userId", res.data._id);
     router.push({
-      path: 'chart'
-    })
+      path: "chart",
+    });
   }
-}
+};
 </script>
 
 <template>
@@ -66,15 +69,16 @@ const confirmBtn = async () => {
     border-bottom: 1px solid #929090;
     background: transparent;
     border-radius: 0;
-    color: #fff;
   }
   .confirm-btn {
+    text-align: center;
     /deep/ .el-button {
-      width: 100%;
+      width: 180px;
+      padding: 20px 0;
       margin-top: 20px;
       background: #eee;
-      color: #fff;
       border: none;
+      border-radius: 25px;
     }
   }
 }

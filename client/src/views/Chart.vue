@@ -8,38 +8,21 @@ const myChart = ref<any>();
 const myCharts = ref<any>();
 const lineChart = ref<any>();
 const lineCharts = ref<any>();
-const formData = reactive({
-  startDate: "",
-  endDate: "",
-});
 const chartData: Array<any> = reactive([]);
 const lineChartData = reactive({
   total: [],
   life: [],
   food: [],
-  clothes: [],
+  clothes: []
 });
 
 onMounted(() => {
-  initDate("init");
+  handleBarChart()
+  handleLineChart(new Date())
 });
 
-const initDate = (tag: string) => {
-  getCountData("init");
-};
-const getCountData = async (tag: string) => {
-  const res: any = await forTimeCount({
-    startDate: formData.startDate,
-    endDate: formData.endDate,
-    userId: localStorage.getItem("userId"),
-  });
-  chartData.length = 0;
-  chartData.push(...res.data);
-  // 更新柱状图表数据
-  initBarChart(chartData);
-};
-const handleYearChange = async (year: string) => {
-  const startDate = format(new Date(year));
+const handleLineChart = async (year: Date) => {
+  const startDate = format(year);
   const endDate = startDate.slice(0, 4) + "-12-31";
   const res: any = await forYearCount({
     startDate: startDate,
@@ -51,6 +34,18 @@ const handleYearChange = async (year: string) => {
   lineChartData.food = res.data.food;
   lineChartData.clothes = res.data.clothes;
   initLineChart();
+};
+const handleBarChart = async () => {
+  const tempData = format(new Date()).slice(0, 8) + '01'
+  const res: any = await forTimeCount({
+    startDate: tempData,
+    endDate: format(new Date()),
+    userId: localStorage.getItem("userId")
+  });
+  chartData.length = 0;
+  chartData.push(...res.data);
+  // 更新柱状图表数据
+  initBarChart(chartData);
 };
 const initBarChart = (data: Array<any>) => {
   myCharts.value = echarts.init(myChart.value);
@@ -88,7 +83,7 @@ const initLineChart = () => {
       {
         type: "inside", // 这个 dataZoom 组件是 slider 型 dataZoom 组件
         start: 0, // 左边在 10% 的位置。
-        end: 40,
+        end: 80,
       },
     ],
     grid: {
@@ -113,7 +108,11 @@ const initLineChart = () => {
         "十一月",
         "十二月",
       ],
-      boundaryGap: false,
+      boundaryGap: false, // 距离坐标原点是否有间隔
+      axisLabel: { //  如果这个字段不设置，echarts会根据屏宽及横坐标数据自动给出间隔
+        interval: 1, // 间隔数，比如第一个横坐标为1， 间隔为2，意思是显示第四个横坐标的label
+        rotate: 40 // 横坐标上label的倾斜度
+      },
       max: 11,
     },
     yAxis: {
@@ -160,20 +159,13 @@ const format = (value: Date) => {
 
 <template>
   <div class="countData-box">
-    <el-row>
-      <el-form :model="formData">
-        <el-col :span="10" :offset="1" class="col-input"
-          ><i class="el-icon-date"></i
-          ><el-input id="dateStart" v-model="formData.startDate"></el-input
-        ></el-col>
-        <el-col :span="10" :offset="2" class="col-input"
-          ><i class="el-icon-date"></i
-          ><el-input id="dateEnd" v-model="formData.endDate"></el-input
-        ></el-col>
-      </el-form>
-    </el-row>
     <!-- 柱状图 -->
     <el-card class="box-card">
+      <template #header>
+      <div class="card-header">
+        <span>本月</span>
+      </div>
+    </template>
       <div id="myChart" style="width: 100%; height: 300px" ref="myChart"></div>
     </el-card>
     <!-- 折现图 -->
@@ -182,8 +174,8 @@ const format = (value: Date) => {
         <el-date-picker
           v-model="yearData"
           type="year"
-          placeholder="选择年"
-          @change="handleYearChange"
+          placeholder="请选择"
+          @change="handleLineChart"
         >
         </el-date-picker>
       </div>

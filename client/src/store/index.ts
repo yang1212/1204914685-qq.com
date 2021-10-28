@@ -13,9 +13,9 @@ export default createStore({
     }
   },
   actions: {
-    setIsLogin(context,value) {
-      context.commit('setLoginMadalMutation', value)
-    },
+    // setIsLogin(context,value) {
+    //   context.commit('setLoginMadalMutation', value)
+    // }
   },
   modules: {}
 });

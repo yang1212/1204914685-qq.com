@@ -19,10 +19,10 @@ const loading = ref(false)
     v-model="showDrawer"
   >
     <el-tabs type="border-card">
-      <el-tab-pane label="login">
+      <el-tab-pane label="登录">
         <Login/>
       </el-tab-pane>
-      <el-tab-pane label="register">
+      <el-tab-pane label="注册">
         <Register/>
       </el-tab-pane>
     </el-tabs>
