@@ -113,16 +113,16 @@ const format = (value: Date) => {
 .add-new-box {
   padding: 20px 40px;
   .form-data {
-    /deep/ .el-form-item__content {
+    ::v-deep(.el-form-item__content) {
       width: 100%;
     }
     .select-form-item {
-      /deep/ .el-select {
+      ::v-deep(.el-select) {
         width: 100%;
       }
     }
     .date-form-item {
-      /deep/ .el-date-editor {
+      ::v-deep(.el-date-editor) {
         width: 100%;
       }
     }

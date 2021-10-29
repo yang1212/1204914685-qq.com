@@ -3,8 +3,8 @@
 
 [script setup](https://chengpeiquan.com/article/vue3-script-setup.html)
 
-
 别名路径引用编辑器报错，页面正常/vetur
+
 
 [vue3中提示找不到模块“path“](https://python.iitter.com/other/107033.html)
 
@@ -16,3 +16,5 @@ icon失效 -x
 
 [emit事件怎么向上分发](https://chengpeiquan.com/article/vue3-script-setup.html#%E4%BB%80%E4%B9%88%E6%98%AF-defineprops-%E5%92%8C-defineemit)
 
+
+vue-tsc --noEmit --skipLibCheck 的作用

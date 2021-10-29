@@ -26,7 +26,7 @@ const openLoginModal = () => {
   <div class="home-container">
     <p class="text-info animation-word">{{ word }}</p>
     <p class="default-btn btn-position" @click="openLoginModal">开始使用</p>
-    <LoginPanel v-if="$store.state.showLoginModal"/>
+    <LoginPanel v-if="store.state.showLoginModal"/>
   </div>
 </template>
 

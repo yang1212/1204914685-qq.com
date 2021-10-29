@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted, toRefs } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import * as echarts from "echarts";
 import { forTimeCount, forYearCount } from "api/index";
 
@@ -198,7 +198,7 @@ const format = (value: Date) => {
       left: 7px;
       z-index: 1;
     }
-    /deep/ .el-input {
+    ::v-deep(.el-input) {
       input {
         padding-left: 30px;
       }
