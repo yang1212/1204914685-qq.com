@@ -1,60 +1,64 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import addPanel from '../addPanel/index.vue'
-import loginPanel from '../loginPanel/index.vue'
+import { ref, onMounted } from "vue"
+import { useStore } from "vuex"
+import { useRouter } from "vue-router"
+import { getMemberInfo } from "api/index"
+import AddPanel from "../addPanel/index.vue"
 
 const showAddPanelRef = ref(false)
+const userName = ref('')
 const store = useStore()
 const router = useRouter()
 
 onMounted(() => {
-  console.log('hearder')
-  if (localStorage.getItem('userId')) {
-    store.commit("setIsLogin", true)
-  } else {
-    store.commit("setIsLogin", false)
-  }
-})
+  handleMemberInfo()
+});
 
 const openAddModal = () => {
-  showAddPanelRef.value = true
-}
+  showAddPanelRef.value = true;
+};
 const closeAddModal = () => {
-  showAddPanelRef.value = false
+  showAddPanelRef.value = false;
+};
+const handleMemberInfo = async () => {
+  const res:any = await getMemberInfo({userId: localStorage.getItem('userId')})
+  userName.value = res.data[0].objName
 }
 const goChartPage = () => {
   router.push({
-    path: 'chart'
-  })
-}
-const goMemberPage = () => {
+    path: "chart",
+  });
+};
+const loginOut = () => {
+  localStorage.removeItem("userId")
+  store.commit("setIsLogin", false)
   router.push({
-    path: 'memberInfo'
+    path: 'home'
   })
-}
-const openLoginModal = () => {
-  store.commit("setLoginMadalMutation", true)
-}
-const closeLoginModal = () => {
-  store.commit("setLoginMadalMutation", false)
 }
 </script>
 
 <template>
   <div class="header">
-    <div v-if="$store.state.isLogin">
-      <div class="nav-list">
-        <span @click="openAddModal">&nbsp;1</span>
-        <span @click="goChartPage">&nbsp;2</span>
-        <span @click="goMemberPage">&nbsp;3</span>
-      </div>
-      <!-- <span class="more-icon response-icon">=</span> -->
+    <div class="nav-list">
+      <span @click="openAddModal">&nbsp;数据录入</span>
+      <span @click="goChartPage">&nbsp;数据分析</span>
     </div>
-    <p class="default-btn btn-position" @click="openLoginModal" v-else>开始使用</p>
-    <addPanel v-if="showAddPanelRef" @close="closeAddModal"/>
-    <loginPanel v-if="$store.state.showLoginModal"/>
+    <div class="member-info">
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          <span class="member-avatar">T</span>
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>Hello, {{userName}}</el-dropdown-item>
+            <el-dropdown-item @click="loginOut">Login out</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <AddPanel v-if="showAddPanelRef" @close="closeAddModal" />
   </div>
 </template>
 
@@ -63,9 +67,9 @@ const closeLoginModal = () => {
   height: 55px;
   line-height: 55px;
   .nav-list {
-    float: right;
+    float: left;
     padding-right: 20px;
-    color: #fff;
+    color: #2a2a2a;
     font-size: 15px;
     text-align: right;
     span {
@@ -73,35 +77,20 @@ const closeLoginModal = () => {
       width: 80px;
     }
   }
-  .more-icon {
+  .member-info {
     position: absolute;
-    right: 20px;
-    top: 3px;
-    color: #fff;
-  }
-  .default-btn {
-    padding: 8px 15px;
-    border-radius: 5px;
-    color: #fff;
-    border: 1px solid #fff;
-    font-size: 13px;
-    line-height: 15px;
-  }
-  .btn-position {
-    position: absolute;
-    top: 25px;
-    right: 17px;
-  }
-}
-.response-icon {
-  display: none;
-}
-@media only screen and (max-width: 500px) {
-  .response-list {
-    display: none;
-  }
-  .response-icon {
-    display: block;
+    top: 0px;
+    right: 10px;
+    .member-avatar {
+      font-weight: bold;
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      border-radius: 50%;
+      color:#fff;
+      background: #000;
+      display: inline-block;
+    }
   }
 }
 </style>

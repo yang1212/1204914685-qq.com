@@ -1,13 +1,3 @@
-[初始化参考资料来源](https://segmentfault.com/a/1190000038999784)
-
-
-[script setup](https://chengpeiquan.com/article/vue3-script-setup.html)
-
-
-别名路径引用编辑器报错，页面正常/vetur
-
-[vue3中提示找不到模块“path“](https://python.iitter.com/other/107033.html)
-
 TO DO:
 
 Target: 数据分析与录入
@@ -27,3 +17,15 @@ Target: 数据分析与录入
 9、完善剩余接口 -x
 
 10、将id放置于请求头
+
+Today:
+
+1、整体UI调整(粗调)  -x
+
+2、复杂对象，数组如何建立在常量的基础上处理响应式数据
+
+3、寻找轻量构建工具
+
+4、财务版本最后需求追踪落实
+
+5、定制业务前端UI找产品确认

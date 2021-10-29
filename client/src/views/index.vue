@@ -1,22 +1,25 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import navHeader from './component/navHeader/index.vue'
+import { useRoute } from 'vue-router'
+import { useStore } from "vuex"
+import navHeader from 'component/navHeader/index.vue'
 
-const isHome = ref(false)
 const route = useRoute()
+const store = useStore()
 
 onMounted(() => {
-  if (route.path === '/home') {
-    isHome.value = true
-  }  
+  if (localStorage.getItem("userId")) {
+    store.commit("setIsLogin", true);
+  } else {
+    store.commit("setIsLogin", false);
+  }
 })
 
 </script>
 
 <template>
-  <div class="index-page" :class="{'home-bg': isHome}">
-    <navHeader/>
+  <div class="index-page">
+    <navHeader v-if="route.path !== '/home'"/>
     <router-view/>
   </div>
 </template>
@@ -25,8 +28,5 @@ onMounted(() => {
 .index-page {
   position: relative;
   height: 100%;
-}
-.home-bg {
-  background-image: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
 }
 </style>

@@ -31,12 +31,10 @@ const loginOut = () => {
         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         class="member-avatar-default"
       ></el-avatar>
-    </div>
-    <div class="login-out">
-      <i class="el-icon-edit-outline"></i>&nbsp;Hello, {{ userName }}
+      <p><i class="el-icon-s-promotion"></i>&nbsp;Hello, {{ userName }}</p>
     </div>
     <div class="login-out" @click="loginOut">
-      <i class="el-icon-s-promotion"></i>&nbsp;Login out
+      Login out
     </div>
   </div>
 </template>
