@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, toRefs } from "vue";
 import * as echarts from "echarts";
 import { forTimeCount, forYearCount } from "api/index";
 
@@ -29,6 +29,7 @@ const handleLineChart = async (year: Date) => {
     endDate: endDate,
     userId: localStorage.getItem("userId"),
   });
+  // 暂未找到合适的赋值方案
   lineChartData.total = res.data.total;
   lineChartData.life = res.data.life;
   lineChartData.food = res.data.food;
