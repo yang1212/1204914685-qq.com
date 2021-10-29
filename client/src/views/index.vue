@@ -1,43 +1,32 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from "vuex"
+import navHeader from 'component/navHeader/index.vue'
+
+const route = useRoute()
+const store = useStore()
+
+onMounted(() => {
+  if (localStorage.getItem("userId")) {
+    store.commit("setIsLogin", true);
+  } else {
+    store.commit("setIsLogin", false);
+  }
+})
+
+</script>
+
 <template>
-  <div class="container-box">
-    <router-view></router-view>
+  <div class="index-page">
+    <navHeader v-if="route.path !== '/home'"/>
+    <router-view/>
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'index',
-  data () {
-    return {
-    }
-  },
-  created () {
-    const userId = JSON.parse(localStorage.getItem('userId'))
-    if (userId) {
-      this.$router.push({
-        path: '/billManager'
-      })
-    }
-  },
-  methods: {
-  }
-}
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.container-box {
-  width: 100%;
+<style scoped>
+.index-page {
+  position: relative;
   height: 100%;
-  // background: url("../assets/images/loginBg.png");
-}
-.masklayer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, .7);
 }
 </style>

@@ -18,6 +18,7 @@ router.post('/login', function(req, res) {
 
 router.post('/register', function(req, res) {
   const { objName, password } = req.body
+  console.log(22, req.body, res, objName)
   Register.find({'objName': objName}).then(data => {
     if (data.length === 0) { // 未有相同账号注册
       const tempData = new Register({
