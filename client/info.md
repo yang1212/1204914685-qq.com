@@ -26,3 +26,12 @@ To Do:
 
 打包后index无法正常打开，它是基于npm run serve预览 -x
 
+
+problems:
+
+vite打包配置理解不够透彻
+
+vue3的实践难度系数不够深入
+
+
+

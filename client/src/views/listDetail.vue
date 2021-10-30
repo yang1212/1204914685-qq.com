@@ -49,7 +49,7 @@ const addSuccess = () => {
 
 <template>
   <div class="detail-box">
-    <span @click="openAddModal">&nbsp;录入</span>
+    <span @click="openAddModal" class="el-icon-circle-plus-outline add-btn"></span>
     <el-timeline>
       <el-timeline-item
         v-for="(item, index) in detailList"
@@ -76,7 +76,7 @@ const addSuccess = () => {
 
 <style lang="less" scoped>
 .detail-box {
-  padding: 0 20px;
+  padding: 15px 20px;
   text-align: left;
   .delete-btn {
     position: absolute;
@@ -85,8 +85,15 @@ const addSuccess = () => {
     cursor: pointer;
     i {
       font-weight: bold;
-      color: red;
+      color: gray;
     }
+  }
+  .add-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 49%;
+    font-size: 25px;
+    font-weight: bold;
   }
 }
 </style>

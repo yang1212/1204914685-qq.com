@@ -24,12 +24,12 @@ const initData = () => {
   handleLineChart(new Date())
 }
 const handleLineChart = async (year: Date) => {
-  const startDate = format(year);
-  const endDate = startDate.slice(0, 4) + "-12-31";
+  const startDate = format(year)
+  const endDate = startDate.slice(0, 4) + "-12-31"
   const res: any = await forYearCount({
     startDate: startDate,
     endDate: endDate,
-    userId: localStorage.getItem("userId"),
+    userId: localStorage.getItem("userId")
   });
   // 暂未找到合适的赋值方案
   lineChartData.total = res.data.total;
@@ -45,10 +45,10 @@ const handleBarChart = async () => {
     endDate: format(new Date()),
     userId: localStorage.getItem("userId")
   });
-  chartData.length = 0;
-  chartData.push(...res.data);
+  chartData.length = 0
+  chartData.push(...res.data)
   // 更新柱状图表数据
-  initBarChart(chartData);
+  initBarChart(chartData)
 }
 const initBarChart = (data: Array<any>) => {
   myCharts.value = echarts.init(myChart.value);
@@ -58,6 +58,13 @@ const initBarChart = (data: Array<any>) => {
     xAxis: {
       type: "category",
       data: data.map((item) => item.label),
+      axisTick: {
+        alignWithLabel: true //坐标轴刻度与标签对齐
+      },
+      axisLabel: {
+        interval: 0,
+        rotate: 0
+      }
     },
     yAxis: {
       type: "value",
@@ -65,9 +72,9 @@ const initBarChart = (data: Array<any>) => {
     series: [
       {
         type: "bar",
-        barWidth: "25%",
+        barWidth: "30%",
         data: data.map((item) => item.value),
-      },
+      }
     ],
   };
   option && myCharts.value.setOption(option);
@@ -164,23 +171,18 @@ const format = (value: Date) => {
   <div class="countData-box">
     <!-- 柱状图 -->
     <el-card class="box-card">
-      <template #header>
-      <div class="card-header">
-        <span>本月</span>
-      </div>
-    </template>
+      <p>本月</p>
       <div id="myChart" style="width: 100%; height: 300px" ref="myChart"></div>
     </el-card>
     <!-- 折现图 -->
     <el-card class="box-card">
-      <div class="block">
+      <div>
         <el-date-picker
           v-model="yearData"
           type="year"
           placeholder="请选择"
           @change="handleLineChart"
-        >
-        </el-date-picker>
+        ></el-date-picker>
       </div>
       <div class="text item">
         <div ref="lineChart" style="width: 100%; height: 300px"></div>
@@ -207,7 +209,11 @@ const format = (value: Date) => {
     }
   }
   .box-card {
-    margin: 15px 15px;
+    border-top: none;
+    margin-top: 10px;
+    ::v-deep(.el-card__body) {
+      padding: 10px 0;
+    }
   }
 }
 </style>

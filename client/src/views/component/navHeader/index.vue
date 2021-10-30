@@ -62,19 +62,21 @@ const loginOut = () => {
 .header {
   height: 55px;
   line-height: 55px;
+  border-bottom: 1px solid#eee;
+  position: relative;
   .nav-list {
-    padding-left: 16px;
+    padding-left: 5px;
     color: #2a2a2a;
     font-size: 15px;
     text-align: left;
     span {
       display: inline-block;
-      width: 70px;
+      width: 60px;
     }
   }
   .member-info {
     position: absolute;
-    top: 0px;
+    top: -3px;
     right: 10px;
     .member-avatar {
       font-weight: bold;
