@@ -3,9 +3,7 @@ import { ref, onMounted } from "vue"
 import { useStore } from "vuex"
 import { useRouter } from "vue-router"
 import { getMemberInfo } from "api/index"
-import AddPanel from "../addPanel/index.vue"
 
-const showAddPanelRef = ref(false)
 const userName = ref('')
 const store = useStore()
 const router = useRouter()
@@ -14,12 +12,6 @@ onMounted(() => {
   handleMemberInfo()
 });
 
-const openAddModal = () => {
-  showAddPanelRef.value = true;
-};
-const closeAddModal = () => {
-  showAddPanelRef.value = false;
-};
 const handleMemberInfo = async () => {
   const res:any = await getMemberInfo({userId: localStorage.getItem('userId')})
   userName.value = res.data[0].objName
@@ -29,6 +21,11 @@ const goChartPage = () => {
     path: "chart",
   });
 };
+const goDetailPage = () => {
+  router.push({
+    path: "listDetail",
+  });
+}
 const loginOut = () => {
   localStorage.removeItem("userId")
   store.commit("setIsLogin", false)
@@ -41,13 +38,13 @@ const loginOut = () => {
 <template>
   <div class="header">
     <div class="nav-list">
-      <span @click="openAddModal">&nbsp;数据录入</span>
-      <span @click="goChartPage">&nbsp;数据分析</span>
+      <span @click="goDetailPage">&nbsp;详情</span>
+      <span @click="goChartPage">&nbsp;图表</span>
     </div>
     <div class="member-info">
       <el-dropdown>
         <span class="el-dropdown-link">
-          <span class="member-avatar">T</span>
+          <span class="member-avatar">B</span>
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <template #dropdown>
@@ -58,7 +55,6 @@ const loginOut = () => {
         </template>
       </el-dropdown>
     </div>
-    <AddPanel v-if="showAddPanelRef" @close="closeAddModal" />
   </div>
 </template>
 
@@ -67,14 +63,13 @@ const loginOut = () => {
   height: 55px;
   line-height: 55px;
   .nav-list {
-    float: left;
-    padding-right: 20px;
+    padding-left: 16px;
     color: #2a2a2a;
     font-size: 15px;
-    text-align: right;
+    text-align: left;
     span {
       display: inline-block;
-      width: 80px;
+      width: 70px;
     }
   }
   .member-info {

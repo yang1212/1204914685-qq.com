@@ -17,6 +17,10 @@ const router = createRouter({
         {
           path: '/chart',
           component: () => import('../views/Chart.vue')
+        },
+        {
+          path: '/listDetail',
+          component: () => import('../views/listDetail.vue')
         }
       ]
     }

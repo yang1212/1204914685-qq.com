@@ -1,49 +1,49 @@
 <script lang="ts" setup>
-import { reactive, ref, onMounted, defineEmits } from "vue";
-import { createBill, getTypeData } from "api/index";
+import { reactive, ref, onMounted, defineEmits } from "vue"
+import { createBill, getTypeData } from "api/index"
 
-const loading = ref(false);
-const showDrawer = ref(true);
-const formDataRef: any = ref(null);
-const objTypeEnum: Array<any> = reactive([]);
+const loading = ref(false)
+const showDrawer = ref(true)
+const formDataRef: any = ref(null)
+const objTypeEnum: Array<any> = reactive([])
 const formData = reactive({
   objName: "",
   objType: "",
   objPrice: "",
   objDate: "",
-  userId: "",
+  userId: ""
 });
 const formDataRules = reactive({
   objName: [{ required: true, message: "请输入名称", trigger: "blur" }],
   objType: [{ required: true, message: "请选择类型", trigger: "change" }],
   objPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
-  objDate: [{ required: true, message: "请选择日期", trigger: "blur" }],
+  objDate: [{ required: true, message: "请选择日期", trigger: "blur" }]
 });
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "sure"])
 
 onMounted(async () => {
-  formData.objDate = format(new Date());
-  const res: any = await getTypeData(null);
+  formData.objDate = format(new Date())
+  const res: any = await getTypeData(null)
   // 不可直接赋值，不然答不到响应式，原理暂时不是很理解
-  objTypeEnum.length = 0;
-  objTypeEnum.push(...res.data);
-});
+  objTypeEnum.length = 0
+  objTypeEnum.push(...res.data)
+})
 const onSubmit = () => {
   formDataRef.value.validate().then(async () => {
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId")
     if (userId) {
-      formData.userId = userId;
+      formData.userId = userId
     }
-    loading.value = true;
+    loading.value = true
     const res: any = await createBill(formData)
-    loading.value = false;
-    emit("close")
+    loading.value = false
+    emit("sure")
   }).catch(() => {
-    loading.value = false;
+    loading.value = false
   })
 };
 const onCancel = () => {
-  emit("close");
+  emit("close")
 };
 const format = (value: Date) => {
   const year = value.getFullYear();

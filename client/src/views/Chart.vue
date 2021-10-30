@@ -1,26 +1,28 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
-import * as echarts from "echarts";
-import { forTimeCount, forYearCount } from "api/index";
+import { ref, reactive, onMounted } from "vue"
+import * as echarts from "echarts"
+import { forTimeCount, forYearCount } from "api/index"
 
-const yearData = ref("");
-const myChart = ref<any>();
-const myCharts = ref<any>();
-const lineChart = ref<any>();
-const lineCharts = ref<any>();
-const chartData: Array<any> = reactive([]);
+const yearData = ref("")
+const myChart = ref<any>()
+const myCharts = ref<any>()
+const lineChart = ref<any>()
+const lineCharts = ref<any>()
+const chartData: Array<any> = reactive([])
 const lineChartData = reactive({
   total: [],
   life: [],
   food: [],
   clothes: []
-});
+})
 
 onMounted(() => {
+  initData()
+})
+const initData = () => {
   handleBarChart()
   handleLineChart(new Date())
-});
-
+}
 const handleLineChart = async (year: Date) => {
   const startDate = format(year);
   const endDate = startDate.slice(0, 4) + "-12-31";
@@ -35,7 +37,7 @@ const handleLineChart = async (year: Date) => {
   lineChartData.food = res.data.food;
   lineChartData.clothes = res.data.clothes;
   initLineChart();
-};
+}
 const handleBarChart = async () => {
   const tempData = format(new Date()).slice(0, 8) + '01'
   const res: any = await forTimeCount({
@@ -47,7 +49,7 @@ const handleBarChart = async () => {
   chartData.push(...res.data);
   // 更新柱状图表数据
   initBarChart(chartData);
-};
+}
 const initBarChart = (data: Array<any>) => {
   myCharts.value = echarts.init(myChart.value);
   let option;
@@ -69,7 +71,7 @@ const initBarChart = (data: Array<any>) => {
     ],
   };
   option && myCharts.value.setOption(option);
-};
+}
 const initLineChart = () => {
   lineCharts.value = echarts.init(lineChart.value);
   let option;
@@ -143,7 +145,7 @@ const initLineChart = () => {
     ],
   };
   option && lineCharts.value.setOption(option);
-};
+}
 const format = (value: Date) => {
   if (!value) {
     return "";
@@ -155,7 +157,7 @@ const format = (value: Date) => {
     month = "0" + month;
   }
   return `${year}-${month}-${day}`;
-};
+}
 </script>
 
 <template>
