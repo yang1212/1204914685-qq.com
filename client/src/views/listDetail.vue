@@ -91,9 +91,11 @@ const addSuccess = () => {
   .add-btn {
     position: absolute;
     bottom: 10px;
-    left: 49%;
+    left: 50%;
+    transform: translate(-50%, 0);
     font-size: 25px;
     font-weight: bold;
+    color: #6654F1;
   }
 }
 </style>

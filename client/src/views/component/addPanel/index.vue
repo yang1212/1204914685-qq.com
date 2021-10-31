@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref, onMounted, defineEmits } from "vue"
+import { reactive, ref, onMounted } from "vue"
 import { createBill, getTypeData } from "api/index"
 
 const loading = ref(false)

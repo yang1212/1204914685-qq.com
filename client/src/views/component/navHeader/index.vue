@@ -85,7 +85,7 @@ const loginOut = () => {
       line-height: 25px;
       border-radius: 50%;
       color:#fff;
-      background: #000;
+      background: #6654F1;
       display: inline-block;
     }
   }
