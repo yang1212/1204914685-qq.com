@@ -49,7 +49,9 @@ const addSuccess = () => {
 
 <template>
   <div class="detail-box">
-    <span @click="openAddModal" class="el-icon-circle-plus-outline add-btn"></span>
+    <el-icon @click="openAddModal" class="el-icon-circle-plus-outline add-btn">
+      <CirclePlus/>
+    </el-icon>
     <el-timeline>
       <el-timeline-item
         v-for="(item, index) in detailList"
@@ -61,7 +63,9 @@ const addSuccess = () => {
         <el-card>
           <h4>({{ item.objName }})</h4>
           <p>支出: {{ item.objPrice }}元</p>
-          <span class="delete-btn" @click="handleDelete(index)"><i class="el-icon-delete"></i></span>
+          <el-icon class="delete-btn" @click="handleDelete(index)">
+            <Delete />
+          </el-icon>
         </el-card>
       </el-timeline-item>
       <el-timeline-item placement="top" v-show="detailList.length === 0">

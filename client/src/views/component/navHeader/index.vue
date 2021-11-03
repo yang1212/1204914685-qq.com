@@ -43,9 +43,11 @@ const loginOut = () => {
     </div>
     <div class="member-info">
       <el-dropdown>
-        <span class="el-dropdown-link">
+        <span>
           <span class="member-avatar">B</span>
-          <i class="el-icon-arrow-down el-icon--right"></i>
+          <el-icon>
+            <ArrowDown />
+          </el-icon>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
