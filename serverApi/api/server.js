@@ -8,7 +8,7 @@ const app = new Express()
 
 app.use(bodyParser.urlencoded({extended: false}))
 //管理页面路由
-app.use('/', require('./admin'))
+app.use('/', require('./index'))
 
 mongoose.Promise = require('bluebird')
 mongoose.connect(`mongodb://${config.dbHost}:${config.dbPort}/runoob`, function (err, db) {
@@ -18,7 +18,7 @@ mongoose.connect(`mongodb://${config.dbHost}:${config.dbPort}/runoob`, function 
   }
   console.log('数据库连接成功')
 
-  app.listen(port, function (err) {  // app.listen的作用
+  app.listen(port, function (err) {
     if (err) {
       console.error('err:', err)
     } else {

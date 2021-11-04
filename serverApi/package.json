@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "scripts": {
-    "serve": "node ./api.js"
+    "serve": "node ./index.js"
   },
   "dependencies": {
     "bluebird": "^3.5.0",

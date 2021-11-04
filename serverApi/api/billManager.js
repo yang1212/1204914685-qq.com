@@ -48,27 +48,6 @@ router.post('/getMemberInfo', function(req, res) {
   })
 })
 
-function handleMemberInfo(data, name) {
-  let tempData = []
-  data.forEach((item) => {
-    tempData.push({userId: item.userId, imgPath: item.imgPath, userName: name}) // 在原有基础上添加userName属性无法加入，需通过push重组数据
-  })
-  return tempData
-}
-
-router.post('/initTypeList', function (req, res) { // 初始化类型，可通过postman，无需写这个接口
-  const { code, label } = req.body
-  const tempData = new BillType({
-    code,
-    label
-  })
-  tempData.save().then(data => {
-    responseClient(res, 200, 200, '请求成功', data)
-  }).catch(err => {
-    responseClient(res)
-  })
-})
-
 router.post('/typeData', function (req, res) {
   BillType.find().then(data => {
     responseClient(res, 200, 200, '请求成功', data)
@@ -148,6 +127,19 @@ router.post('/forYearCount', function(req, res) { // 根据年份计算每个类
       }
       responseClient(res, 200, 200, '请求成功', tempData)
     })
+  }).catch(err => {
+    responseClient(res)
+  })
+})
+
+router.post('/initTypeList', function (req, res) { // 初始化类型，可通过postman，无需写这个接口
+  const { code, label } = req.body
+  const tempData = new BillType({
+    code,
+    label
+  })
+  tempData.save().then(data => {
+    responseClient(res, 200, 200, '请求成功', data)
   }).catch(err => {
     responseClient(res)
   })
