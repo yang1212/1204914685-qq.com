@@ -1,7 +1,5 @@
 import request from './require'
 
-// const request = Request()
-
 export function login(params:any) {
   return request({
     url: 'bill/login',

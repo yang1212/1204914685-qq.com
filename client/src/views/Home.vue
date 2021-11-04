@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
+import { ref, reactive, defineAsyncComponent  } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from "vue-router"
-import LoginPanel from 'component/loginPanel/index.vue'
 
 const word = ref("Test")
-const wordList: Array<string> = reactive(["hello world", "2", "3"])
+const wordList: Array<string> = reactive(["hello world", "tree wanted keep", "everything be ok"])
 const store = useStore()
 const router = useRouter()
+const LoginPanel = defineAsyncComponent(
+  () => import("component/loginPanel/index.vue")
+)
 
 word.value = wordList[Math.floor(Math.random() * wordList.length)]
 
@@ -26,14 +28,14 @@ const openLoginModal = () => {
   <div class="home-container">
     <p class="text-info animation-word">{{ word }}</p>
     <p class="default-btn btn-position" @click="openLoginModal">开始使用</p>
-    <LoginPanel v-if="$store.state.showLoginModal"/>
+    <LoginPanel v-if="store.state.showLoginModal"/>
   </div>
 </template>
 
 <style scoped lang="less">
 .home-container {
   height: 100%;
-  background-image: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
+  background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 47%, #6654F1 100%);
   .default-btn {
     padding: 8px 15px;
     border-radius: 5px;
@@ -52,8 +54,10 @@ const openLoginModal = () => {
     position: absolute;
     font-weight: bold;
     top: 50%;
-    right: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
+    text-shadow: 5px 5px 5px #6654F1;
+    font-size: 17px;
   }
   .animation-word {
     opacity: 0;

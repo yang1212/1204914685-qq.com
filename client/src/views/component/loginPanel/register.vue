@@ -30,7 +30,7 @@ const confirmBtn = async () => {
     store.commit("setIsLogin", true);
     localStorage.setItem("userId", res.data._id);
     router.push({
-      path: "chart",
+      path: "listDetail",
     });
   }
 };
@@ -64,7 +64,7 @@ const confirmBtn = async () => {
 <style scoped lang="less">
 .form-box {
   margin-top: 50px;
-  /deep/ .el-input__inner {
+  ::v-deep(.el-input__inner) {
     border: 1px solid transparent;
     border-bottom: 1px solid #929090;
     background: transparent;
@@ -72,7 +72,7 @@ const confirmBtn = async () => {
   }
   .confirm-btn {
     text-align: center;
-    /deep/ .el-button {
+    ::v-deep(.el-button) {
       width: 180px;
       padding: 20px 0;
       margin-top: 20px;

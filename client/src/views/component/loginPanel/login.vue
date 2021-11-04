@@ -27,7 +27,7 @@ const onLogin = async () => {
     store.commit("setIsLogin", true)
     localStorage.setItem('userId', res.data[0]._id)
     router.push({
-      path: 'chart'
+      path: 'listDetail'
     })
   }
 }
@@ -61,7 +61,7 @@ const onLogin = async () => {
 .login-box {
   .form-box {
     margin-top: 50px;
-    /deep/ .el-input__inner {
+    ::v-deep(.el-input__inner) {
       border: 1px solid transparent;
       border-bottom: 1px solid #dcdfe6;
       background: transparent;
@@ -74,7 +74,7 @@ const onLogin = async () => {
     }
     .login-btn {
       text-align: center;
-      /deep/ .el-button {
+      ::v-deep(.el-button) {
         width: 180px;
         padding: 20px 0;
         margin-top: 20px;

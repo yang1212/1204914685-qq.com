@@ -1,33 +1,35 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted, toRefs } from "vue";
-import * as echarts from "echarts";
-import { forTimeCount, forYearCount } from "api/index";
+import { ref, reactive, onMounted } from "vue"
+import * as echarts from "echarts"
+import { forTimeCount, forYearCount } from "api/index"
 
-const yearData = ref("");
-const myChart = ref<any>();
-const myCharts = ref<any>();
-const lineChart = ref<any>();
-const lineCharts = ref<any>();
-const chartData: Array<any> = reactive([]);
+const yearData = ref("")
+const myChart = ref<any>()
+const myCharts = ref<any>()
+const lineChart = ref<any>()
+const lineCharts = ref<any>()
+const chartData: Array<any> = reactive([])
 const lineChartData = reactive({
   total: [],
   life: [],
   food: [],
   clothes: []
-});
+})
 
 onMounted(() => {
+  initData()
+})
+const initData = () => {
   handleBarChart()
   handleLineChart(new Date())
-});
-
+}
 const handleLineChart = async (year: Date) => {
-  const startDate = format(year);
-  const endDate = startDate.slice(0, 4) + "-12-31";
+  const startDate = format(year)
+  const endDate = startDate.slice(0, 4) + "-12-31"
   const res: any = await forYearCount({
     startDate: startDate,
     endDate: endDate,
-    userId: localStorage.getItem("userId"),
+    userId: localStorage.getItem("userId")
   });
   // 暂未找到合适的赋值方案
   lineChartData.total = res.data.total;
@@ -35,7 +37,7 @@ const handleLineChart = async (year: Date) => {
   lineChartData.food = res.data.food;
   lineChartData.clothes = res.data.clothes;
   initLineChart();
-};
+}
 const handleBarChart = async () => {
   const tempData = format(new Date()).slice(0, 8) + '01'
   const res: any = await forTimeCount({
@@ -43,11 +45,11 @@ const handleBarChart = async () => {
     endDate: format(new Date()),
     userId: localStorage.getItem("userId")
   });
-  chartData.length = 0;
-  chartData.push(...res.data);
+  chartData.length = 0
+  chartData.push(...res.data)
   // 更新柱状图表数据
-  initBarChart(chartData);
-};
+  initBarChart(chartData)
+}
 const initBarChart = (data: Array<any>) => {
   myCharts.value = echarts.init(myChart.value);
   let option;
@@ -56,6 +58,13 @@ const initBarChart = (data: Array<any>) => {
     xAxis: {
       type: "category",
       data: data.map((item) => item.label),
+      axisTick: {
+        alignWithLabel: true //坐标轴刻度与标签对齐
+      },
+      axisLabel: {
+        interval: 0,
+        rotate: 0
+      }
     },
     yAxis: {
       type: "value",
@@ -63,13 +72,13 @@ const initBarChart = (data: Array<any>) => {
     series: [
       {
         type: "bar",
-        barWidth: "25%",
+        barWidth: "30%",
         data: data.map((item) => item.value),
-      },
+      }
     ],
   };
   option && myCharts.value.setOption(option);
-};
+}
 const initLineChart = () => {
   lineCharts.value = echarts.init(lineChart.value);
   let option;
@@ -143,7 +152,7 @@ const initLineChart = () => {
     ],
   };
   option && lineCharts.value.setOption(option);
-};
+}
 const format = (value: Date) => {
   if (!value) {
     return "";
@@ -155,30 +164,25 @@ const format = (value: Date) => {
     month = "0" + month;
   }
   return `${year}-${month}-${day}`;
-};
+}
 </script>
 
 <template>
   <div class="countData-box">
     <!-- 柱状图 -->
     <el-card class="box-card">
-      <template #header>
-      <div class="card-header">
-        <span>本月</span>
-      </div>
-    </template>
+      <p>本月</p>
       <div id="myChart" style="width: 100%; height: 300px" ref="myChart"></div>
     </el-card>
     <!-- 折现图 -->
     <el-card class="box-card">
-      <div class="block">
+      <div>
         <el-date-picker
           v-model="yearData"
           type="year"
           placeholder="请选择"
           @change="handleLineChart"
-        >
-        </el-date-picker>
+        ></el-date-picker>
       </div>
       <div class="text item">
         <div ref="lineChart" style="width: 100%; height: 300px"></div>
@@ -198,14 +202,18 @@ const format = (value: Date) => {
       left: 7px;
       z-index: 1;
     }
-    /deep/ .el-input {
+    ::v-deep(.el-input) {
       input {
         padding-left: 30px;
       }
     }
   }
   .box-card {
-    margin: 15px 15px;
+    border-top: none;
+    margin-top: 10px;
+    ::v-deep(.el-card__body) {
+      padding: 10px 0;
+    }
   }
 }
 </style>
