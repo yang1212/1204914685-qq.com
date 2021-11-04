@@ -24,10 +24,10 @@ const emit = defineEmits(["close", "sure"])
 onMounted(async () => {
   formData.objDate = format(new Date())
   const res: any = await getTypeData(null)
-  // 不可直接赋值，不然答不到响应式，原理暂时不是很理解
   objTypeEnum.length = 0
   objTypeEnum.push(...res.data)
 })
+
 const onSubmit = () => {
   formDataRef.value.validate().then(async () => {
     const userId = localStorage.getItem("userId")

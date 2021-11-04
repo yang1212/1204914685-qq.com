@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue"
 import * as echarts from "echarts"
-import { forTimeCount, forYearCount } from "api/index"
+import { forTimeCount, forYearCount, getTypeData } from "api/index"
 
 const yearData = ref("")
 const myChart = ref<any>()
@@ -9,16 +9,21 @@ const myCharts = ref<any>()
 const lineChart = ref<any>()
 const lineCharts = ref<any>()
 const chartData: Array<any> = reactive([])
-const lineChartData = reactive({
-  total: [],
-  life: [],
-  food: [],
-  clothes: []
+const typeEnum: Array<any> = reactive([
+  {
+    code: 'total',
+    label: '全部'
+  }
+])
+let lineChartData: any = reactive({})
+
+onMounted(async () => {
+  initData()
+  const res:any = await getTypeData(null)
+  typeEnum.length = 1
+  typeEnum.push(...res.data)
 })
 
-onMounted(() => {
-  initData()
-})
 const initData = () => {
   handleBarChart()
   handleLineChart(new Date())
@@ -31,12 +36,8 @@ const handleLineChart = async (year: Date) => {
     endDate: endDate,
     userId: localStorage.getItem("userId")
   });
-  // 暂未找到合适的赋值方案
-  lineChartData.total = res.data.total;
-  lineChartData.life = res.data.life;
-  lineChartData.food = res.data.food;
-  lineChartData.clothes = res.data.clothes;
-  initLineChart();
+  lineChartData = res.data
+  initLineChart()
 }
 const handleBarChart = async () => {
   const tempData = format(new Date()).slice(0, 8) + '01'
@@ -80,14 +81,21 @@ const initBarChart = (data: Array<any>) => {
   option && myCharts.value.setOption(option);
 }
 const initLineChart = () => {
-  lineCharts.value = echarts.init(lineChart.value);
+  lineCharts.value = echarts.init(lineChart.value)
   let option;
+  const series = typeEnum.map((item) => {
+    return {
+      name: item.label,
+      type: "line",
+      data: lineChartData[item.code]
+    }
+  })
   option = {
     tooltip: {
       trigger: "axis",
     },
     legend: {
-      data: ["综合", "生活", "饮食", "服饰"],
+      data: typeEnum.map((item) => item.label)
     },
     dataZoom: [
       {
@@ -128,30 +136,9 @@ const initLineChart = () => {
     yAxis: {
       type: "value",
     },
-    series: [
-      {
-        name: "综合",
-        type: "line",
-        data: lineChartData.total,
-      },
-      {
-        name: "生活",
-        type: "line",
-        data: lineChartData.life,
-      },
-      {
-        name: "饮食",
-        type: "line",
-        data: lineChartData.food,
-      },
-      {
-        name: "服饰",
-        type: "line",
-        data: lineChartData.clothes,
-      },
-    ],
-  };
-  option && lineCharts.value.setOption(option);
+    series: series
+  }
+  option && lineCharts.value.setOption(option)
 }
 const format = (value: Date) => {
   if (!value) {
