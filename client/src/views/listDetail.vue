@@ -79,6 +79,8 @@ const addSuccess = () => {
 </template>
 
 <style lang="less" scoped>
+@import "common/style/index.less";
+
 .detail-box {
   padding: 15px 20px;
   text-align: left;
@@ -99,7 +101,7 @@ const addSuccess = () => {
     transform: translate(-50%, 0);
     font-size: 25px;
     font-weight: bold;
-    color: #6654F1;
+    color: @primary-color;
   }
 }
 </style>

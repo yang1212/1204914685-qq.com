@@ -16,7 +16,7 @@ word.value = wordList[Math.floor(Math.random() * wordList.length)]
 const openLoginModal = () => {
   if (store.state.isLogin) {
     router.push({
-      path: 'chart'
+      path: 'listDetail'
     })
   } else {
     store.commit("setLoginMadalMutation", true)
@@ -33,6 +33,8 @@ const openLoginModal = () => {
 </template>
 
 <style scoped lang="less">
+@import "common/style/index.less";
+
 .home-container {
   height: 100%;
   background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 47%, #6654F1 100%);
@@ -56,7 +58,7 @@ const openLoginModal = () => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-shadow: 5px 5px 5px #6654F1;
+    text-shadow: 5px 5px 5px @primary-color;
     font-size: 17px;
   }
   .animation-word {

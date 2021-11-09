@@ -19,6 +19,11 @@ const formDataRules = reactive({
   objPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
   objDate: [{ required: true, message: "请选择日期", trigger: "blur" }]
 });
+const commonType: any = reactive([
+  { type: 'food', name: '🕖 早' },
+  { type: 'food', name: '🕛 中' },
+  { type: 'food', name: '🕖 晚' }
+])
 const emit = defineEmits(["close", "sure"])
 
 onMounted(async () => {
@@ -41,10 +46,10 @@ const onSubmit = () => {
   }).catch(() => {
     loading.value = false
   })
-};
+}
 const onCancel = () => {
   emit("close")
-};
+}
 const format = (value: Date) => {
   const year = value.getFullYear();
   const day = value.getDate() > 9 ? value.getDate() : "0" + value.getDate();
@@ -53,7 +58,13 @@ const format = (value: Date) => {
     month = "0" + month;
   }
   return `${year}-${month}-${day}`;
-};
+}
+const select = (data) => {
+  if (data) {
+    formData.objType = data.type
+    formData.objName = data.name
+  }
+}
 </script>
 
 <template>
@@ -68,6 +79,21 @@ const format = (value: Date) => {
     v-model="showDrawer"
   >
     <div class="add-new-box">
+      <div class="common-type">
+        <el-dropdown>
+          <span>
+            <span class="member-avatar">常用类别</span>
+            <el-icon>
+              <ArrowDown />
+            </el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="select(item)" v-for="(item, index) in commonType" :key="index">{{item.name}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
       <el-form
         class="form-data"
         :model="formData"
@@ -112,6 +138,10 @@ const format = (value: Date) => {
 <style scoped lang="less">
 .add-new-box {
   padding: 20px 40px;
+  .common-type {
+    width: 140px;
+    margin-bottom: 10px;
+  }
   .form-data {
     ::v-deep(.el-form-item__content) {
       width: 100%;
