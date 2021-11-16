@@ -23,18 +23,18 @@ const formDataRules = reactive({
 const commonType: any = reactive([
   { 
     type: 'food', 
-    typeName: 'food',
-    data: ['🕖 早', '🕛 中', '🕖 晚', '🍬 零']
+    typeName: '饮食',
+    data: ['🕖早餐', '🕛中餐', '🕖晚餐', '🍧零食', '🍆食材']
   },
   { 
     type: 'clothes',
-    typeName: 'clothes',
-    data: ['👕', '👖', '👢']
+    typeName: '服饰',
+    data: ['👕上衣', '👖裤子', '👢鞋']
   },
   { 
     type: 'rent',
-    typeName: 'clothes',
-    data: ['🏠', '⚡']
+    typeName: '租房',
+    data: ['🏠房租', '⚡物业']
   }
 ])
 // 添加常用类型值
@@ -81,7 +81,7 @@ const selectCur = (data) => {
   }
 }
 const openCommonPanel = () => {
-  showCommonPanelRef.value = true
+  showCommonPanelRef.value = !showCommonPanelRef.value
 }
 </script>
 
@@ -104,7 +104,7 @@ const openCommonPanel = () => {
         </p>
         <div class="common-list" v-show="showCommonPanelRef">
           <div v-for="(item, index) in commonType" :key="index">
-            <p>{{item.typeName}}</p>
+            <p class="item-title">{{item.typeName}}</p>
             <el-tag v-for="(items, indexs) in item.data" :key="indexs" @click="selectCur({type: item.type, curInfo: items})">{{items}}</el-tag>
           </div>
         </div>
@@ -153,24 +153,28 @@ const openCommonPanel = () => {
 <style scoped lang="less">
 @import "common/style/index.less";
 .add-new-box {
-  padding: 20px 40px;
   .common-type {
     margin-bottom: 10px;
     position: relative;
     .common-type-title {
       color: @primary-color;
       font-weight: bold;
-      cursor: pointer;
     }
     .common-list {
-      width: 300px;
+      width: 320px;
       border-radius: 5px;
-      padding: 5px 10px;
+      padding: 0 10px 15px 10px;
       background: #eee;
       border: 1px solid #eee;
       position: absolute;
-      top: 20px;
+      top: 25px;
       z-index: 2;
+      .item-title {
+        margin: 15px 0 5px 0;
+      }
+      ::v-deep(.el-tag) {
+        margin: 5px 7px 0 0;
+      }
     }
   }
   .form-data {
