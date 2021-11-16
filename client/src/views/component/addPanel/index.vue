@@ -4,6 +4,7 @@ import { createBill, getTypeData } from "api/index"
 
 const loading = ref(false)
 const showDrawer = ref(true)
+const showCommonPanelRef = ref(false)
 const formDataRef: any = ref(null)
 const objTypeEnum: Array<any> = reactive([])
 const formData = reactive({
@@ -20,10 +21,23 @@ const formDataRules = reactive({
   objDate: [{ required: true, message: "请选择日期", trigger: "blur" }]
 });
 const commonType: any = reactive([
-  { type: 'food', name: '🕖 早' },
-  { type: 'food', name: '🕛 中' },
-  { type: 'food', name: '🕖 晚' }
+  { 
+    type: 'food', 
+    typeName: 'food',
+    data: ['🕖 早', '🕛 中', '🕖 晚', '🍬 零']
+  },
+  { 
+    type: 'clothes',
+    typeName: 'clothes',
+    data: ['👕', '👖', '👢']
+  },
+  { 
+    type: 'rent',
+    typeName: 'clothes',
+    data: ['🏠', '⚡']
+  }
 ])
+// 添加常用类型值
 const emit = defineEmits(["close", "sure"])
 
 onMounted(async () => {
@@ -59,11 +73,15 @@ const format = (value: Date) => {
   }
   return `${year}-${month}-${day}`;
 }
-const select = (data) => {
+const selectCur = (data) => {
   if (data) {
     formData.objType = data.type
-    formData.objName = data.name
+    formData.objName = data.curInfo
+    showCommonPanelRef.value = false
   }
+}
+const openCommonPanel = () => {
+  showCommonPanelRef.value = true
 }
 </script>
 
@@ -80,19 +98,16 @@ const select = (data) => {
   >
     <div class="add-new-box">
       <div class="common-type">
-        <el-dropdown>
-          <span>
-            <span class="member-avatar">常用类别</span>
-            <el-icon>
-              <ArrowDown />
-            </el-icon>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="select(item)" v-for="(item, index) in commonType" :key="index">{{item.name}}</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <p class="common-type-title" @click="openCommonPanel">
+          <span>常用类别</span>
+          <el-icon><ArrowDown /></el-icon>
+        </p>
+        <div class="common-list" v-show="showCommonPanelRef">
+          <div v-for="(item, index) in commonType" :key="index">
+            <p>{{item.typeName}}</p>
+            <el-tag v-for="(items, indexs) in item.data" :key="indexs" @click="selectCur({type: item.type, curInfo: items})">{{items}}</el-tag>
+          </div>
+        </div>
       </div>
       <el-form
         class="form-data"
@@ -136,11 +151,27 @@ const select = (data) => {
 </template>
 
 <style scoped lang="less">
+@import "common/style/index.less";
 .add-new-box {
   padding: 20px 40px;
   .common-type {
-    width: 140px;
     margin-bottom: 10px;
+    position: relative;
+    .common-type-title {
+      color: @primary-color;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .common-list {
+      width: 300px;
+      border-radius: 5px;
+      padding: 5px 10px;
+      background: #eee;
+      border: 1px solid #eee;
+      position: absolute;
+      top: 20px;
+      z-index: 2;
+    }
   }
   .form-data {
     ::v-deep(.el-form-item__content) {
@@ -155,6 +186,9 @@ const select = (data) => {
       ::v-deep(.el-date-editor) {
         width: 100%;
       }
+    }
+    .btn-group {
+      float: right;
     }
   }
 }
