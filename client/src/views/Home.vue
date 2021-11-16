@@ -4,7 +4,7 @@ import { useStore } from 'vuex'
 import { useRouter } from "vue-router"
 
 const word = ref("Test")
-const wordList: Array<string> = reactive(["hello world", "tree wanted keep", "everything be ok"])
+const wordList: Array<string> = reactive(["道可道、非常道", "水利万物而不争", "树欲静而风不止"])
 const store = useStore()
 const router = useRouter()
 const LoginPanel = defineAsyncComponent(
