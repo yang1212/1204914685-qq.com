@@ -10,7 +10,11 @@ const router = Express.Router()
 router.post('/login', function(req, res) {
   const { objName, password } = req.body
   Register.find({'objName': objName, 'password': password}).then(data => {
-    responseClient(res, 200, 200, '请求成功', data)
+    if (data.length !== 0) {
+      responseClient(res, 200, 200, '请求成功', data)
+    } else {
+      responseClient(res, 200, 101, '请输入正确的用户名和密码进行登录', data)
+    }
   }).catch(err => {
     responseClient(res)
   })
@@ -18,7 +22,6 @@ router.post('/login', function(req, res) {
 
 router.post('/register', function(req, res) {
   const { objName, password } = req.body
-  console.log(22, req.body, res, objName)
   Register.find({'objName': objName}).then(data => {
     if (data.length === 0) { // 未有相同账号注册
       const tempData = new Register({
@@ -32,7 +35,7 @@ router.post('/register', function(req, res) {
         responseClient(res)
       })
     } else {
-      responseClient(res, 200, 403, '该账号已注册', data)
+      responseClient(res, 200, 102, '该账号已注册', data)
     }
   }).catch(err => {
     responseClient(res)
