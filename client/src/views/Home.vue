@@ -3,15 +3,13 @@ import { ref, reactive, defineAsyncComponent  } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from "vue-router"
 
-const word = ref("Test")
 const wordList: Array<string> = reactive(["道可道、非常道", "水利万物而不争", "树欲静而风不止"])
+const word = ref(wordList[Math.floor(Math.random() * wordList.length)])
 const store = useStore()
 const router = useRouter()
 const LoginPanel = defineAsyncComponent(
   () => import("component/loginPanel/index.vue")
 )
-
-word.value = wordList[Math.floor(Math.random() * wordList.length)]
 
 const openLoginModal = () => {
   if (store.state.isLogin) {

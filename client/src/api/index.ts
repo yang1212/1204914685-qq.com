@@ -79,3 +79,11 @@ export function forYearCount(params:any) {
     method: 'post'
   })
 }
+
+export function initTypeList(params:any) {
+  return request({
+    url: 'bill/initTypeList',
+    data: params,
+    method: 'post'
+  })
+}
