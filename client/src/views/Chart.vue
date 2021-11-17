@@ -16,10 +16,10 @@ const typeEnum: Array<any> = reactive([
 let lineChartData: any = reactive({})
 
 onMounted(async () => {
-  initData()
   const res:any = await getTypeData(null)
   typeEnum.length = 1
   typeEnum.push(...res.data)
+  initData()
 })
 
 const initData = () => {
