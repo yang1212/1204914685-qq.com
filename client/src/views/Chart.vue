@@ -181,6 +181,7 @@ const format = (value: Date) => {
 <style scoped lang="less">
 .countData-box {
   margin: 0 auto;
+  padding: 65px 20px 15px 20px;
   .col-input {
     position: relative;
     i {

@@ -65,9 +65,12 @@ const loginOut = () => {
 
 .header {
   height: 55px;
+  width: 100%;
   line-height: 55px;
   border-bottom: 1px solid#eee;
-  position: relative;
+  position: fixed;
+  z-index: 2;
+  background: #fff;
   .nav-list {
     padding-left: 5px;
     color: #2a2a2a;

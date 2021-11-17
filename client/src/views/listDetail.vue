@@ -82,8 +82,9 @@ const addSuccess = () => {
 @import "common/style/index.less";
 
 .detail-box {
-  padding: 15px 20px;
+  padding: 65px 20px 15px 20px;
   text-align: left;
+  height: 1000px;
   .delete-btn {
     position: absolute;
     right: 10px;
@@ -96,8 +97,8 @@ const addSuccess = () => {
   }
   .add-btn {
     z-index: 2;
-    position: absolute;
-    bottom: 10px;
+    position: fixed;
+    bottom: 20px;
     left: 50%;
     transform: translate(-50%, 0);
     font-size: 25px;
