@@ -11,7 +11,7 @@ const formData = reactive({
   objName: "",
   objType: "",
   objPrice: "",
-  objDate: "",
+  objDate: null,
   userId: ""
 });
 const formDataRules = reactive({
@@ -41,13 +41,14 @@ const commonType: any = reactive([
 const emit = defineEmits(["close", "sure"])
 
 onMounted(async () => {
-  formData.objDate = format(new Date())
+  formData.objDate = new Date()
   const res: any = await getTypeData(null)
   objTypeEnum.length = 0
   objTypeEnum.push(...res.data)
 })
 
 const onSubmit = () => {
+  if (formData.objDate) { formData.objDate = format(formData.objDate) }
   formDataRef.value.validate().then(async () => {
     const userId = localStorage.getItem("userId")
     if (userId) {
@@ -135,7 +136,6 @@ const openCommonPanel = () => {
         <el-form-item class="date-form-item" prop="objDate">
           <el-date-picker
             v-model="formData.objDate"
-            value-format="yyyy-MM-dd"
             type="date"
             placeholder="objDate"
           >

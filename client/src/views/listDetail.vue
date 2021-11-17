@@ -95,6 +95,7 @@ const addSuccess = () => {
     }
   }
   .add-btn {
+    z-index: 2;
     position: absolute;
     bottom: 10px;
     left: 50%;
