@@ -4,10 +4,8 @@ import * as echarts from "echarts"
 import { forTimeCount, forYearCount, getTypeData } from "api/index"
 
 const yearData = ref("")
-const myChart = ref<any>()
-const myCharts = ref<any>()
-const lineChart = ref<any>()
-const lineCharts = ref<any>()
+const barChartRef = ref(null)
+const lineChartRef = ref(null)
 const chartData: Array<any> = reactive([])
 const typeEnum: Array<any> = reactive([
   {
@@ -28,17 +26,6 @@ const initData = () => {
   handleBarChart()
   handleLineChart(new Date())
 }
-const handleLineChart = async (year: Date) => {
-  const startDate = format(year)
-  const endDate = startDate.slice(0, 4) + "-12-31"
-  const res: any = await forYearCount({
-    startDate: startDate,
-    endDate: endDate,
-    userId: localStorage.getItem("userId")
-  });
-  lineChartData = res.data
-  initLineChart()
-}
 const handleBarChart = async () => {
   const tempData = format(new Date()).slice(0, 8) + '01'
   const res: any = await forTimeCount({
@@ -52,10 +39,16 @@ const handleBarChart = async () => {
   initBarChart(chartData)
 }
 const initBarChart = (data: Array<any>) => {
-  myCharts.value = echarts.init(myChart.value);
-  let option;
-  option = {
+  const barChart = echarts.init(barChartRef.value)
+  barChart.setOption({
     color: ["#003366"],
+    tooltip: {
+      show: true,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
     xAxis: {
       type: "category",
       data: data.map((item) => item.label),
@@ -76,13 +69,22 @@ const initBarChart = (data: Array<any>) => {
         barWidth: "30%",
         data: data.map((item) => item.value),
       }
-    ],
-  };
-  option && myCharts.value.setOption(option);
+    ]
+  })
+}
+const handleLineChart = async (year: Date) => {
+  const startDate = format(year)
+  const endDate = startDate.slice(0, 4) + "-12-31"
+  const res: any = await forYearCount({
+    startDate: startDate,
+    endDate: endDate,
+    userId: localStorage.getItem("userId")
+  });
+  lineChartData = res.data
+  initLineChart()
 }
 const initLineChart = () => {
-  lineCharts.value = echarts.init(lineChart.value)
-  let option;
+  const lineChart = echarts.init(lineChartRef.value)
   const series = typeEnum.map((item) => {
     return {
       name: item.label,
@@ -90,7 +92,7 @@ const initLineChart = () => {
       data: lineChartData[item.code]
     }
   })
-  option = {
+  lineChart.setOption({
     tooltip: {
       trigger: "axis",
     },
@@ -137,8 +139,7 @@ const initLineChart = () => {
       type: "value",
     },
     series: series
-  }
-  option && lineCharts.value.setOption(option)
+  })
 }
 const format = (value: Date) => {
   if (!value) {
@@ -159,7 +160,7 @@ const format = (value: Date) => {
     <!-- 柱状图 -->
     <el-card class="box-card">
       <p>本月</p>
-      <div id="myChart" style="width: 100%; height: 300px" ref="myChart"></div>
+      <div style="width: 100%; height: 300px" ref="barChartRef"></div>
     </el-card>
     <!-- 折现图 -->
     <el-card class="box-card">
@@ -172,7 +173,7 @@ const format = (value: Date) => {
         ></el-date-picker>
       </div>
       <div class="text item">
-        <div ref="lineChart" style="width: 100%; height: 300px"></div>
+        <div ref="lineChartRef" style="width: 100%; height: 300px"></div>
       </div>
     </el-card>
   </div>
