@@ -95,6 +95,7 @@ const openCommonPanel = () => {
     custom-class="demo-drawer"
     ref="drawer"
     destroy-on-close
+    :show-close="false"
     v-model="showDrawer"
   >
     <div class="add-new-box">

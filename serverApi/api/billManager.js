@@ -1,9 +1,9 @@
 import Express from 'express'
 import { responseClient } from './common/utils'
-import { handleCountData } from './common/index'
 import BillType from '../models/billTypeEnum'
 import BillDetail from '../models/billDetail'
 import Register from '../models/register'
+import calculate from './common/calculate'
 
 const router = Express.Router()
 
@@ -93,13 +93,20 @@ router.post('/delListData', (req, res) => {
   })
 })
 
-// forTimeCount
 router.post('/forTimeCount', function (req, res) { // 根据时间区间得到数据，并累加
   const { startDate, endDate, userId } = req.body
   BillDetail.find({ objDate: {$lte:endDate, $gte:startDate}, userId: userId }).then(data => {
     BillType.find().then(typeData => {
-      const tempData = handleCountData(data, typeData)
-      responseClient(res, 200, 200, '请求成功', tempData)
+      let result = []
+      typeData.forEach((item, index) => {
+        result.push({type: item.code, label: item.label, value: 0})
+        data.forEach((items) => {
+          if (item.code === items.objType) {
+            result[index].value = calculate.plus(result[index].value, Number(items.objPrice))
+          }
+        })
+      })
+      responseClient(res, 200, 200, '请求成功', result)
     })
   }).catch(err => {
     responseClient(res)
@@ -110,25 +117,22 @@ router.post('/forYearCount', function(req, res) { // 根据年份计算每个类
   const { startDate, endDate, userId } = req.body
   BillDetail.find({ objDate: {$lte:endDate, $gte:startDate}, userId: userId }).then(data => {
     BillType.find().then(typeData => {
-      let tempData = {
-        total: []
-      }
-      typeData.forEach((item) => {
-        tempData[item.code] = []
-      })
-      for (let i = 1; i < 13; i++) {
-        for (let j in tempData) {
-          tempData[j].push(0)
+      let result = {}
+      let typeDataTemp = typeData.concat({ code: 'total', label: '全部' })
+      typeDataTemp.forEach((item) => { result[item.code] = [] })
+      for (let month = 1; month < 13; month++) {
+        for (let prop in result) {
+          result[prop].push(0)
         }
         data.forEach((items) => {
-          const tag = items.objDate.slice(5, 7) // 取得数据的月份
-          if (Number(tag) === i) {
-            tempData[items.objType][i - 1] += Number(items.objPrice)
-            tempData.total[i - 1] += Number(items.objPrice)
+          const curMonth = +items.objDate.slice(5, 7) // 取得数据的月份(+'01' === 1)
+          if (curMonth === month) {
+            result[items.objType][month - 1] = calculate.plus(result[items.objType][month - 1], Number(items.objPrice))
+            result.total[month - 1] = calculate.plus(result.total[month - 1], Number(items.objPrice))
           }
         })
       }
-      responseClient(res, 200, 200, '请求成功', tempData)
+      responseClient(res, 200, 200, '请求成功', result)
     })
   }).catch(err => {
     responseClient(res)
