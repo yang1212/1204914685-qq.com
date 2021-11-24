@@ -3,7 +3,6 @@ import { ref, reactive, onMounted } from "vue"
 import * as echarts from "echarts"
 import { forTimeCount, forYearCount, getTypeData } from "api/index"
 
-const yearData = ref("")
 const barChartRef = ref(null)
 const lineChartRef = ref(null)
 const chartData: Array<any> = reactive([])
@@ -14,6 +13,7 @@ const typeEnum: Array<any> = reactive([
   }
 ])
 let lineChartData: any = reactive({})
+let yearData = reactive({ date: new Date() })
 
 onMounted(async () => {
   const res:any = await getTypeData(null)
@@ -72,8 +72,8 @@ const initBarChart = (data: Array<any>) => {
     ]
   })
 }
-const handleLineChart = async (year: Date) => {
-  const startDate = format(year)
+const handleLineChart = async (value: Date) => {
+  const startDate = format(value).slice(0, 4) + "-01-01"
   const endDate = startDate.slice(0, 4) + "-12-31"
   const res: any = await forYearCount({
     startDate: startDate,
@@ -166,7 +166,7 @@ const format = (value: Date) => {
     <el-card class="box-card">
       <div>
         <el-date-picker
-          v-model="yearData"
+          v-model="yearData.date"
           type="year"
           placeholder="请选择"
           @change="handleLineChart"
