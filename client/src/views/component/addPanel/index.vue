@@ -4,13 +4,14 @@ import { createBill, getTypeData } from "api/index"
 
 const loading = ref(false)
 const showDrawer = ref(true)
+const showCommonPanelRef = ref(false)
 const formDataRef: any = ref(null)
 const objTypeEnum: Array<any> = reactive([])
 const formData = reactive({
   objName: "",
   objType: "",
   objPrice: "",
-  objDate: "",
+  objDate: null,
   userId: ""
 });
 const formDataRules = reactive({
@@ -19,16 +20,35 @@ const formDataRules = reactive({
   objPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
   objDate: [{ required: true, message: "请选择日期", trigger: "blur" }]
 });
+const commonType: any = reactive([
+  { 
+    type: 'food', 
+    typeName: '饮食',
+    data: ['🕖早餐', '🕛中餐', '🕖晚餐', '🍧零食', '🍆食材']
+  },
+  { 
+    type: 'clothes',
+    typeName: '服饰',
+    data: ['👕上衣', '👖裤子', '👢鞋']
+  },
+  { 
+    type: 'rent',
+    typeName: '租房',
+    data: ['🏠房租', '⚡物业']
+  }
+])
+// 添加常用类型值
 const emit = defineEmits(["close", "sure"])
 
 onMounted(async () => {
-  formData.objDate = format(new Date())
+  formData.objDate = new Date()
   const res: any = await getTypeData(null)
-  // 不可直接赋值，不然答不到响应式，原理暂时不是很理解
   objTypeEnum.length = 0
   objTypeEnum.push(...res.data)
 })
+
 const onSubmit = () => {
+  if (formData.objDate) { formData.objDate = format(formData.objDate) }
   formDataRef.value.validate().then(async () => {
     const userId = localStorage.getItem("userId")
     if (userId) {
@@ -41,10 +61,10 @@ const onSubmit = () => {
   }).catch(() => {
     loading.value = false
   })
-};
+}
 const onCancel = () => {
   emit("close")
-};
+}
 const format = (value: Date) => {
   const year = value.getFullYear();
   const day = value.getDate() > 9 ? value.getDate() : "0" + value.getDate();
@@ -53,7 +73,17 @@ const format = (value: Date) => {
     month = "0" + month;
   }
   return `${year}-${month}-${day}`;
-};
+}
+const selectCur = (data) => {
+  if (data) {
+    formData.objType = data.type
+    formData.objName = data.curInfo
+    showCommonPanelRef.value = false
+  }
+}
+const openCommonPanel = () => {
+  showCommonPanelRef.value = !showCommonPanelRef.value
+}
 </script>
 
 <template>
@@ -65,9 +95,22 @@ const format = (value: Date) => {
     custom-class="demo-drawer"
     ref="drawer"
     destroy-on-close
+    :show-close="false"
     v-model="showDrawer"
   >
     <div class="add-new-box">
+      <div class="common-type">
+        <p class="common-type-title" @click="openCommonPanel">
+          <span>常用类别</span>
+          <el-icon><ArrowDown /></el-icon>
+        </p>
+        <div class="common-list" v-show="showCommonPanelRef">
+          <div v-for="(item, index) in commonType" :key="index">
+            <p class="item-title">{{item.typeName}}</p>
+            <el-tag v-for="(items, indexs) in item.data" :key="indexs" @click="selectCur({type: item.type, curInfo: items})">{{items}}</el-tag>
+          </div>
+        </div>
+      </div>
       <el-form
         class="form-data"
         :model="formData"
@@ -94,7 +137,6 @@ const format = (value: Date) => {
         <el-form-item class="date-form-item" prop="objDate">
           <el-date-picker
             v-model="formData.objDate"
-            value-format="yyyy-MM-dd"
             type="date"
             placeholder="objDate"
           >
@@ -110,8 +152,32 @@ const format = (value: Date) => {
 </template>
 
 <style scoped lang="less">
+@import "common/style/index.less";
 .add-new-box {
-  padding: 20px 40px;
+  .common-type {
+    margin-bottom: 10px;
+    position: relative;
+    .common-type-title {
+      color: @primary-color;
+      font-weight: bold;
+    }
+    .common-list {
+      width: 320px;
+      border-radius: 5px;
+      padding: 0 10px 15px 10px;
+      background: #eee;
+      border: 1px solid #eee;
+      position: absolute;
+      top: 25px;
+      z-index: 2;
+      .item-title {
+        margin: 15px 0 5px 0;
+      }
+      ::v-deep(.el-tag) {
+        margin: 5px 7px 0 0;
+      }
+    }
+  }
   .form-data {
     ::v-deep(.el-form-item__content) {
       width: 100%;
@@ -125,6 +191,9 @@ const format = (value: Date) => {
       ::v-deep(.el-date-editor) {
         width: 100%;
       }
+    }
+    .btn-group {
+      float: right;
     }
   }
 }

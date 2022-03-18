@@ -20,7 +20,7 @@ const onLogin = async () => {
   loading.value = true
   const res: any = await login(formData)
   loading.value = false
-  if (res.data.length === 0) {
+  if (res.resultCode === 101) {
     return ElMessage.error('请输入正确的用户名和密码进行登录')
   } else {
     store.commit("setLoginMadalMutation", false)

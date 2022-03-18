@@ -20,4 +20,12 @@ npm run serve
 * 终端执行: cd D:\mongo\bin 进入bin文件目录下: mongod --dbpath D:\mongo\data\db
 
 
+分支：
+
+master/vue3-bill: 前端基于vue3 + element-plus + vite 实现
+
+vue2-bill：前端基于vue2 + element + webpack4 实现
+
+
+
 

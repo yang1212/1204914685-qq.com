@@ -3,20 +3,18 @@ import { ref, reactive, defineAsyncComponent  } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from "vue-router"
 
-const word = ref("Test")
-const wordList: Array<string> = reactive(["hello world", "tree wanted keep", "everything be ok"])
+const wordList: Array<string> = reactive(["道可道、非常道", "水利万物而不争", "树欲静而风不止"])
+const word = ref(wordList[Math.floor(Math.random() * wordList.length)])
 const store = useStore()
 const router = useRouter()
 const LoginPanel = defineAsyncComponent(
   () => import("component/loginPanel/index.vue")
 )
 
-word.value = wordList[Math.floor(Math.random() * wordList.length)]
-
 const openLoginModal = () => {
   if (store.state.isLogin) {
     router.push({
-      path: 'chart'
+      path: 'listDetail'
     })
   } else {
     store.commit("setLoginMadalMutation", true)
@@ -33,6 +31,8 @@ const openLoginModal = () => {
 </template>
 
 <style scoped lang="less">
+@import "common/style/index.less";
+
 .home-container {
   height: 100%;
   background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 47%, #6654F1 100%);
@@ -56,7 +56,7 @@ const openLoginModal = () => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-shadow: 5px 5px 5px #6654F1;
+    text-shadow: 5px 5px 5px @primary-color;
     font-size: 17px;
   }
   .animation-word {

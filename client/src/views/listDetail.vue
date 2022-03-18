@@ -79,9 +79,12 @@ const addSuccess = () => {
 </template>
 
 <style lang="less" scoped>
+@import "common/style/index.less";
+
 .detail-box {
-  padding: 15px 20px;
+  padding: 65px 20px 15px 20px;
   text-align: left;
+  height: 1000px;
   .delete-btn {
     position: absolute;
     right: 10px;
@@ -93,13 +96,14 @@ const addSuccess = () => {
     }
   }
   .add-btn {
-    position: absolute;
-    bottom: 10px;
+    z-index: 2;
+    position: fixed;
+    bottom: 20px;
     left: 50%;
     transform: translate(-50%, 0);
     font-size: 25px;
     font-weight: bold;
-    color: #6654F1;
+    color: @primary-color;
   }
 }
 </style>

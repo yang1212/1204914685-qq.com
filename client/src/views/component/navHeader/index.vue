@@ -61,11 +61,16 @@ const loginOut = () => {
 </template>
 
 <style scoped lang="less">
+@import "common/style/index.less";
+
 .header {
   height: 55px;
+  width: 100%;
   line-height: 55px;
   border-bottom: 1px solid#eee;
-  position: relative;
+  position: fixed;
+  z-index: 2;
+  background: #fff;
   .nav-list {
     padding-left: 5px;
     color: #2a2a2a;
@@ -87,7 +92,7 @@ const loginOut = () => {
       line-height: 25px;
       border-radius: 50%;
       color:#fff;
-      background: #6654F1;
+      background: @primary-color;
       display: inline-block;
     }
   }

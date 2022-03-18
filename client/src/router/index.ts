@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
-// 开启历史模式
-const routerHistory = createWebHistory();
+// 开启hash模式
+const routerHistory = createWebHashHistory();
 
 const router = createRouter({
   history: routerHistory,
@@ -9,6 +9,7 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('../views/index.vue'),
+      redirect: 'home',
       children: [
         {
           path: '/home',

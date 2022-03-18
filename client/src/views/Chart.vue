@@ -1,42 +1,30 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue"
 import * as echarts from "echarts"
-import { forTimeCount, forYearCount } from "api/index"
+import { forTimeCount, forYearCount, getTypeData } from "api/index"
 
-const yearData = ref("")
-const myChart = ref<any>()
-const myCharts = ref<any>()
-const lineChart = ref<any>()
-const lineCharts = ref<any>()
+const barChartRef = ref(null)
+const lineChartRef = ref(null)
 const chartData: Array<any> = reactive([])
-const lineChartData = reactive({
-  total: [],
-  life: [],
-  food: [],
-  clothes: []
-})
+const typeEnum: Array<any> = reactive([
+  {
+    code: 'total',
+    label: '全部'
+  }
+])
+let lineChartData: any = reactive({})
+let yearData = reactive({ date: new Date() })
 
-onMounted(() => {
+onMounted(async () => {
+  const res:any = await getTypeData(null)
+  typeEnum.length = 1
+  typeEnum.push(...res.data)
   initData()
 })
+
 const initData = () => {
   handleBarChart()
   handleLineChart(new Date())
-}
-const handleLineChart = async (year: Date) => {
-  const startDate = format(year)
-  const endDate = startDate.slice(0, 4) + "-12-31"
-  const res: any = await forYearCount({
-    startDate: startDate,
-    endDate: endDate,
-    userId: localStorage.getItem("userId")
-  });
-  // 暂未找到合适的赋值方案
-  lineChartData.total = res.data.total;
-  lineChartData.life = res.data.life;
-  lineChartData.food = res.data.food;
-  lineChartData.clothes = res.data.clothes;
-  initLineChart();
 }
 const handleBarChart = async () => {
   const tempData = format(new Date()).slice(0, 8) + '01'
@@ -51,10 +39,16 @@ const handleBarChart = async () => {
   initBarChart(chartData)
 }
 const initBarChart = (data: Array<any>) => {
-  myCharts.value = echarts.init(myChart.value);
-  let option;
-  option = {
+  const barChart = echarts.init(barChartRef.value)
+  barChart.setOption({
     color: ["#003366"],
+    tooltip: {
+      show: true,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
     xAxis: {
       type: "category",
       data: data.map((item) => item.label),
@@ -75,19 +69,35 @@ const initBarChart = (data: Array<any>) => {
         barWidth: "30%",
         data: data.map((item) => item.value),
       }
-    ],
-  };
-  option && myCharts.value.setOption(option);
+    ]
+  })
+}
+const handleLineChart = async (value: Date) => {
+  const startDate = format(value).slice(0, 4) + "-01-01"
+  const endDate = startDate.slice(0, 4) + "-12-31"
+  const res: any = await forYearCount({
+    startDate: startDate,
+    endDate: endDate,
+    userId: localStorage.getItem("userId")
+  });
+  lineChartData = res.data
+  initLineChart()
 }
 const initLineChart = () => {
-  lineCharts.value = echarts.init(lineChart.value);
-  let option;
-  option = {
+  const lineChart = echarts.init(lineChartRef.value)
+  const series = typeEnum.map((item) => {
+    return {
+      name: item.label,
+      type: "line",
+      data: lineChartData[item.code]
+    }
+  })
+  lineChart.setOption({
     tooltip: {
       trigger: "axis",
     },
     legend: {
-      data: ["综合", "生活", "饮食", "服饰"],
+      data: typeEnum.map((item) => item.label)
     },
     dataZoom: [
       {
@@ -128,30 +138,8 @@ const initLineChart = () => {
     yAxis: {
       type: "value",
     },
-    series: [
-      {
-        name: "综合",
-        type: "line",
-        data: lineChartData.total,
-      },
-      {
-        name: "生活",
-        type: "line",
-        data: lineChartData.life,
-      },
-      {
-        name: "饮食",
-        type: "line",
-        data: lineChartData.food,
-      },
-      {
-        name: "服饰",
-        type: "line",
-        data: lineChartData.clothes,
-      },
-    ],
-  };
-  option && lineCharts.value.setOption(option);
+    series: series
+  })
 }
 const format = (value: Date) => {
   if (!value) {
@@ -172,20 +160,20 @@ const format = (value: Date) => {
     <!-- 柱状图 -->
     <el-card class="box-card">
       <p>本月</p>
-      <div id="myChart" style="width: 100%; height: 300px" ref="myChart"></div>
+      <div style="width: 100%; height: 300px" ref="barChartRef"></div>
     </el-card>
     <!-- 折现图 -->
     <el-card class="box-card">
       <div>
         <el-date-picker
-          v-model="yearData"
+          v-model="yearData.date"
           type="year"
           placeholder="请选择"
           @change="handleLineChart"
         ></el-date-picker>
       </div>
       <div class="text item">
-        <div ref="lineChart" style="width: 100%; height: 300px"></div>
+        <div ref="lineChartRef" style="width: 100%; height: 300px"></div>
       </div>
     </el-card>
   </div>
@@ -194,6 +182,7 @@ const format = (value: Date) => {
 <style scoped lang="less">
 .countData-box {
   margin: 0 auto;
+  padding: 65px 20px 15px 20px;
   .col-input {
     position: relative;
     i {
