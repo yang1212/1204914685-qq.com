@@ -13,7 +13,7 @@ const typeEnum: Array<any> = reactive([
   }
 ])
 let lineChartData: any = reactive({})
-let yearData = reactive({ date: new Date() })
+const yearData = reactive({ date: new Date() })
 
 onMounted(async () => {
   const res:any = await getTypeData(null)
